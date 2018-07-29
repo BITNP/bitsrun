@@ -44,15 +44,15 @@ class User:
             'username': self.username,
             'action': action,
             'ac_id': self.acid,
-            'ip': self.ip,
             'type': self._type,
+            'ip': self.ip,
             'n': self.n,
         }
         data = {
             'username': self.username,
             'password': self.password,
-            'ip': self.ip,
             'acid': self.acid,
+            'ip': self.ip,
             'enc_ver': 'srun_bx1',
         }
         hmd5 = hmac.new(token.encode(), b'').hexdigest()
@@ -79,12 +79,11 @@ class User:
     def logout(self):
         """注销"""
         params = self.make_params("logout")
-        params['action'] = 'logout'
         res = self.ses.get(f'{self.api}/srun_portal', params=params).text
         return json.loads(res[6:-1])
 
 def main():
-    """test"""
+    """从命令行启动"""
     from sys import argv
     from pprint import pprint
     config = json.load(open('./config.json'))
