@@ -14,10 +14,10 @@
    #+end_src
 
    - 登录 BIT-Web =python 10_0_0_55.py login [8]=
-   - 登录 BIT-Web =python 10_0_0_55.py logout [8]=
+   - 登出 BIT-Web =python 10_0_0_55.py logout [8]=
 
    - 登录 BIT-Mobile =python 10_0_0_55.py login 1=
-   - 登录 BIT-Mobile =python 10_0_0_55.py logout 1=
+   - 登出 BIT-Mobile =python 10_0_0_55.py logout 1=
 
 ** 依赖
    - python 3.6+
