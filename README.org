@@ -9,13 +9,15 @@
    #+begin_src json :results output
      {
          "username": "1120172333",
-         "password": "Th1s_n0T_pW0"
+         "password": "Th1s_i5_n0T_pW0"
      }
    #+end_src
 
-   然后执行
-   =python 10_0_0_55.py login= 登录,
-   =python 10_0_0_55.py logout= 注销.
+   - 登录 BIT-Web =python 10_0_0_55.py login [8]=
+   - 登录 BIT-Web =python 10_0_0_55.py logout [8]=
+
+   - 登录 BIT-Mobile =python 10_0_0_55.py login 1=
+   - 登录 BIT-Mobile =python 10_0_0_55.py logout 1=
 
 ** 依赖
    - python 3.6+

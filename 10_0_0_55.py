@@ -15,13 +15,13 @@ class User:
     """登录校园网"""
     # some magic number
     n = 200
-    acid = "1"
     _type = 1
     api = 'http://10.0.0.55/cgi-bin'
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, acid="8"):
         self.username = username
         self.password = password
+        self.acid = acid
         self.ip = get_host_ip()
         self.ses = Session()
 
@@ -89,7 +89,10 @@ def main():
     config = json.load(open('./config.json'))
     username, password = config['username'], config['password']
 
-    user = User(username, password)
+    if len(argv) == 3:
+        user = User(username, password, str(argv[2]))
+    else:
+        user = User(username, password)
     
     if len(argv) == 1 or argv[1] == 'login':
         pprint(user.login())
