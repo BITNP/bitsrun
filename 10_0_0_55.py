@@ -89,11 +89,13 @@ def main():
     config = json.load(open('./config.json'))
     username, password = config['username'], config['password']
 
+    wlan_type = {"mobile": "1", "web" : "8"}
+
     if len(argv) == 3:
-        user = User(username, password, str(argv[2]))
+        user = User(username, password, wlan_type[str(argv[2])])
     else:
         user = User(username, password)
-    
+
     if len(argv) == 1 or argv[1] == 'login':
         pprint(user.login())
     elif argv[1] == 'logout':
