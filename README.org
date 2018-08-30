@@ -19,6 +19,9 @@
    - 登录 BIT-Mobile =python 10_0_0_55.py login mobile=
    - 登出 BIT-Mobile =python 10_0_0_55.py logout mobile=
 
+   - 登录 BeijingLG =python 10_0_0_55.py login library=
+   - 登出 BeijingLG =python 10_0_0_55.py login library=
+
 ** 依赖
    - python 3.6+
    - requests
