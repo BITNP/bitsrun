@@ -12,6 +12,7 @@ import requests
 import socket
 import math
 
+from tempfile import gettempdir
 from hashlib import sha1
 from requests import Session
 from enum import Enum
@@ -170,7 +171,19 @@ class User:
             raise AlreadyOnline
 
         acid = re.search(r"index_(\d+)\.html", res.url).groups()[0]
+
+        with open(f'{gettempdir()}/10_0_0_55_acid', 'w') as f:
+            f.write(acid)
+
         return acid
+
+    @staticmethod
+    def get_acid_cached() -> str:
+        """
+        获取缓存的 acid
+        :return: acid
+        """
+        return open(f'{gettempdir()}/10_0_0_55_acid').read()
 
     def _get_token(self) -> str:
         """
@@ -189,12 +202,18 @@ class User:
         :return: 参数
         """
         token = self._get_token()
-        acid = self.get_acid()
+
+        if action is Action.LOGIN:
+            acid = self.get_acid()
+        else:
+            acid = self.get_acid_cached()
+
         params = {
             "callback": "jsonp",
             "username": self.username,
             "action": action.value,
             "ac_id": acid,
+            "ip": self.ip,
             # 意义不明的 magic number
             "type": self.TYPE,
             "n": self.N,
@@ -225,7 +244,6 @@ class User:
         :return: API 返回的 JSON
         """
         params = self._make_params(action)
-        print(params)
         response = self.ses.get(f"{self._API}/srun_portal", params=params)
         return json.loads(response.text[6:-1])
 
