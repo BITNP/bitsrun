@@ -167,10 +167,11 @@ class User:
         # http://detectportal.firefox.com 似乎不准
         res = requests.get("http://126.com")
 
-        if "index_" not in res.url:
+        if "srun_portal" not in res.url:
             raise AlreadyOnline
 
-        acid = re.search(r"index_(\d+)\.html", res.url).groups()[0]
+        # acid = re.search(r"index_(\d+)\.html", res.url).groups()[0]
+        acid = re.search(r"ac_id=(\d+)&", res.url).groups()[0]
 
         with open(f'{gettempdir()}/10_0_0_55_acid', 'w') as f:
             f.write(acid)
@@ -225,7 +226,7 @@ class User:
             "ip": self.ip,
             "enc_ver": "srun_bx1",
         }
-        hmd5 = hmac.new(token.encode(), b"").hexdigest()
+        hmd5 = hmac.new(token.encode(), b"", "MD5").hexdigest()
         json_data = json.dumps(data, separators=(",", ":"))
         info = "{SRBX1}" + fkbase64(xencode(json_data, token))
         chksum = sha1(
