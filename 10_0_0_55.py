@@ -251,21 +251,24 @@ class User:
 
 def main():
     """从命令行启动"""
-    from sys import argv
+    import argparse
     from pprint import pprint
 
-    if len(argv) < 3:
-        print(f"USAGE: {argv[0]} [login|logout] USERNAME PASSWORD [BIT|CMCC|CU]")
-        return
+    parser = argparse.ArgumentParser()
+    parser.add_argument('action', choices=['login', 'logout'])
+    parser.add_argument('username')
+    parser.add_argument('password')
+    parser.add_argument('--net', choices=['BIT', 'CMCC', 'CU'], default='BIT', required=False)
+    args = parser.parse_args()
 
-    action, username, password, net_type, *_ = argv[1:] + ["BIT"]
-    net_type = {"BIT": NetType.BIT, "CMCC": NetType.CMCC, "CU": NetType.CU}[net_type]
+    # action, username, password, net_type, *_ = argv[1:] + ["BIT"]
+    net_type = {"BIT": NetType.BIT, "CMCC": NetType.CMCC, "CU": NetType.CU}[args.net]
 
-    user = User(username, password, net_type)
+    user = User(args.username, args.password, net_type)
 
-    if argv[1].lower() == "login":
+    if args.action == "login":
         pprint(user.do_action(Action.LOGIN))
-    elif argv[1].lower() == "logout":
+    elif args.action == "logout":
         pprint(user.do_action(Action.LOGOUT))
 
 
