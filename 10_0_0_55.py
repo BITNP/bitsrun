@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# Author: Aloxaf
-# 2018.7.27
+# Author: Aloxaf, felinae98
 
 # 北理工校园网自动登录
 
@@ -11,8 +9,10 @@ import re
 import requests
 import socket
 import math
+import argparse
+import os
+import sys
 
-from tempfile import gettempdir
 from hashlib import sha1
 from requests import Session
 from enum import Enum
@@ -127,13 +127,6 @@ class AlreadyOnline(Exception):
     pass
 
 
-class NetType(Enum):
-    # 也可为空(旧接口)
-    BIT = "@xiaoyuanwang"
-    CMCC = "@yidong"
-    CU = "@liantong"
-
-
 class Action(Enum):
     LOGIN = "login"
     LOGOUT = "logout"
@@ -147,13 +140,12 @@ class User:
 
     _API = "http://10.0.0.55/cgi-bin"
 
-    def __init__(self, username: str, password: str, net_type: NetType):
+    def __init__(self, username: str, password: str):
         """
         :param username: 用户名(学号)
         :param password: 密码
-        :param net_type: 网络类型(校园网/中国移动/中国联通)
         """
-        self.username = username + net_type.value
+        self.username = username
         self.password = password
         self.ip = get_host_ip()
         self.ses = Session()
@@ -167,24 +159,24 @@ class User:
         # http://detectportal.firefox.com 似乎不准
         res = requests.get("http://126.com")
 
-        if "srun_portal" not in res.url:
-            raise AlreadyOnline
-
-        # acid = re.search(r"index_(\d+)\.html", res.url).groups()[0]
-        acid = re.search(r"ac_id=(\d+)&", res.url).groups()[0]
-
-        with open(f'{gettempdir()}/10_0_0_55_acid', 'w') as f:
-            f.write(acid)
-
-        return acid
+        if "srun_portal" in res.url:
+            acid = re.search(r"ac_id=(\d+)&", res.url).groups()[0]
+            return acid
+        elif "10.0.0.55" in res.text:
+            res = requests.get('http://10.0.0.55/index_1.html')
+            acid = re.search(r"ac_id=(\d+)&", res.url).groups()[0]
+            return acid
+        raise AlreadyOnline
 
     @staticmethod
-    def get_acid_cached() -> str:
+    def get_login_acid() -> str:
         """
         获取缓存的 acid
         :return: acid
         """
-        return open(f'{gettempdir()}/10_0_0_55_acid').read()
+        res = requests.get('http://10.0.0.55')
+        acid = re.search(r'ac_id=(\d+)&', res.url).groups()[0]
+        return acid
 
     def _get_token(self) -> str:
         """
@@ -207,7 +199,7 @@ class User:
         if action is Action.LOGIN:
             acid = self.get_acid()
         else:
-            acid = self.get_acid_cached()
+            acid = self.get_login_acid()
 
         params = {
             "callback": "jsonp",
@@ -248,29 +240,46 @@ class User:
         response = self.ses.get(f"{self._API}/srun_portal", params=params)
         return json.loads(response.text[6:-1])
 
+def get_config_path(filename: str) -> List[str]:
+    "get config file path"
+    paths = ['/etc/']
+    if os.geteuid():
+        if os.getenv('XDG_CONFIG_HOME'):
+            paths.append(os.getenvb('XDG_CONFIG_HOME'))
+        else:
+            paths.append(os.path.expanduser('~/.config'))
+    return map(lambda path: os.path.join(path, filename), paths)
+
+def read_config():
+    while True:
+        try:
+            with open(get_config_path('bit-user.json'), 'r') as f:
+                data = json.loads(f.read())
+            return (data['username'], data['password'])
+        except:
+            continue
+    return None
 
 def main():
     """从命令行启动"""
-    import argparse
-    from pprint import pprint
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('action', choices=['login', 'logout'])
-    parser.add_argument('username')
-    parser.add_argument('password')
-    parser.add_argument('--net', choices=['BIT', 'CMCC', 'CU'], default='BIT', required=False)
+    parser = argparse.ArgumentParser(description="Login to BIT network")
+    parser.add_argument('action', choices=['login', 'logout'], help='login or logout')
+    parser.add_argument('-u', '--username')
+    parser.add_argument('-p', '--password')
+    parser.add_argument('-v', '--verbose', action='store_true')
     args = parser.parse_args()
-
-    # action, username, password, net_type, *_ = argv[1:] + ["BIT"]
-    net_type = {"BIT": NetType.BIT, "CMCC": NetType.CMCC, "CU": NetType.CU}[args.net]
-
-    user = User(args.username, args.password, net_type)
-
-    if args.action == "login":
-        pprint(user.do_action(Action.LOGIN))
-    elif args.action == "logout":
-        pprint(user.do_action(Action.LOGOUT))
-
+    if args.username and args.password:
+        user = User(args.username, args.password)
+    elif conf := read_config():
+        user = User(*conf)
+    else:
+        sys.exit(1)
+    if args.action == 'login':
+        res = user.do_action(Action.LOGIN)
+    else:
+        res = user.do_action(Action.LOGOUT)
+    if args.verbose:
+        print(res)
 
 if __name__ == "__main__":
     main()
