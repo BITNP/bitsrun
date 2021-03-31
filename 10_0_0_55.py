@@ -18,6 +18,7 @@ from requests import Session
 from enum import Enum
 from base64 import b64encode
 from typing import *
+from html.parser import HTMLParser
 
 Json = Union[int, str, float, bool, None, List["Json"], Dict[str, "Json"]]
 
@@ -113,13 +114,23 @@ def get_host_ip() -> str:
     获取本机 IP
     :return: IP
     """
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        ip = s.getsockname()[0]
-    finally:
-        s.close()
-
+    res = requests.get("http://10.0.0.55")
+    class SimpleParser(HTMLParser):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.user_ip = ""
+        def handle_starttag(self, tag, attrs):
+            if tag == "input":
+                attr_dict = dict(attrs)
+                if attr_dict.get('name') == 'user_ip':
+                    self.user_ip = attr_dict['value']
+        def feed(self, *args, **kwargs):
+            super().feed(*args, **kwargs)
+            return self.user_ip
+    parser = SimpleParser()
+    ip = parser.feed(res.text)
+    if not ip:
+        raise RuntimeError("you are not in bit")
     return ip
 
 
@@ -251,11 +262,12 @@ def get_config_path(filename: str) -> List[str]:
     return map(lambda path: os.path.join(path, filename), paths)
 
 def read_config():
-    while True:
+    paths = get_config_path('bit-user.json')
+    for path in paths:
         try:
-            with open(get_config_path('bit-user.json'), 'r') as f:
+            with open(path) as f:
                 data = json.loads(f.read())
-            return (data['username'], data['password'])
+                return (data['username'], data['password'])
         except:
             continue
     return None
