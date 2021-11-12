@@ -287,7 +287,11 @@ def main():
     else:
         sys.exit(1)
     if args.action == 'login':
-        res = user.do_action(Action.LOGIN)
+        try:
+            res = user.do_action(Action.LOGIN)
+        except AlreadyOnline:
+            print('AlreadyOnline')
+            res = ''
     else:
         res = user.do_action(Action.LOGOUT)
     if args.verbose:
