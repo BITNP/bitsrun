@@ -167,8 +167,8 @@ class User:
         获取 acid
         :return: acid
         """
-        # http://detectportal.firefox.com 似乎不准
-        res = requests.get("http://126.com")
+        # http 劫持失效之后，直接访问 10.0.0.55 在 URL 中能够返回 ac_id
+        res = requests.get("http://10.0.0.55")
 
         if "srun_portal" in res.url:
             acid = re.search(r"ac_id=(\d+)&", res.url).groups()[0]
