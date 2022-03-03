@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Tuple
+from typing import Optional
 
 
 def get_config_path(filename: str) -> map:
@@ -14,7 +14,7 @@ def get_config_path(filename: str) -> map:
     return map(lambda path: os.path.join(path, filename), paths)
 
 
-def read_config() -> Tuple[str, str] | None:
+def read_config() -> Optional[tuple[str, str]]:
     paths = get_config_path("bit-user.json")
     for path in paths:
         try:
