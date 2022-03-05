@@ -1,11 +1,13 @@
 # 10_0_0_55
 
-登录 10.0.0.55
+> A headless login / logout script for 10.0.0.55.
 
 ## Install
 
+You need at least Python 3.9.
+
 ```bash
-python -m pip install 10_0_0_55-2.0.0-py3-none-any.whl
+python -m pip install 10_0_0_55
 ```
 
 ## Usage
@@ -13,13 +15,13 @@ python -m pip install 10_0_0_55-2.0.0-py3-none-any.whl
 ### CLI
 
 ```bash
-python -m 10_0_0_55 login --username xxxx --password xxxx [--verbose]
-python -m 10_0_0_55 logout --username xxxx --password xxxx [--verbose]
+python -m 10_0_0_55 login -u|--username xxxx -p|--password xxxx [-v|--verbose]
+python -m 10_0_0_55 logout -u|--username xxxx -p|--password xxxx [-v|--verbose]
 ```
 
 ### Config file
 
-配置文件路径：`/etc/bit-user.json` 或者 `~/.config/bit-user.json`：
+Either `/etc/bit-user.json` or `~/.config/bit-user.json`:
 
 ```json
 {
@@ -29,9 +31,12 @@ python -m 10_0_0_55 logout --username xxxx --password xxxx [--verbose]
 ```
 
 ```bash
-python -m 10_0_0_55 login
-python -m 10_0_0_55 logout
+python -m 10_0_0_55 login [-v|--verbose]
+python -m 10_0_0_55 logout [-v|--verbose]
 ```
+
+<details>
+<summary>Using networkmanager-dispatcher (deprecated).</summary>
 
 ### 使用 NetworkManager-dispacher
 
@@ -42,6 +47,8 @@ python -m 10_0_0_55 logout
 将配置文件保存在 `/etc/bit-user.json`
 
 start 并且 enable NetworkManager-dispatcher
+
+</details>
 
 ## Developing
 
