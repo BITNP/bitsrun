@@ -4,7 +4,7 @@
 
 ## Install
 
-You need at least Python 3.9.
+You need at least Python 3.8.
 
 ```bash
 python -m pip install 10_0_0_55

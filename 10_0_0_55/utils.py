@@ -1,7 +1,7 @@
 import math
 from base64 import b64encode
 from html.parser import HTMLParser
-from typing import Optional
+from typing import Optional, Tuple
 from urllib.parse import parse_qs, urlparse
 
 import requests
@@ -9,7 +9,7 @@ import requests
 API_BASE = "http://10.0.0.55"
 
 
-def parse_homepage() -> tuple[str, str]:
+def parse_homepage() -> Tuple[str, str]:
     """Parse homepage of 10.0.0.55 and get the acid + ip of current session
 
     Raises:
@@ -54,7 +54,7 @@ def parse_homepage() -> tuple[str, str]:
     return ip, ac_id[0]
 
 
-def get_user_info() -> tuple[bool, Optional[str]]:
+def get_user_info() -> Tuple[bool, Optional[str]]:
     """Get current logged in user info if exists
 
     Returns:
