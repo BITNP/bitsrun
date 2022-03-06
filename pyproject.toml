@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "10_0_0_55"
-version = "2.0.1"
+version = "2.0.2"
 description = "A headless login / logout script for 10.0.0.55"
 authors = ["spencerwooo <spencer.woo@outlook.com>"]
 license = "MIT"

@@ -12,6 +12,7 @@ def main():
     parser.add_argument("-u", "--username")
     parser.add_argument("-p", "--password")
     parser.add_argument("-v", "--verbose", action="store_true")
+    parser.add_argument("-s", "--silent", action="store_true")
     args = parser.parse_args()
 
     if args.username and args.password:
@@ -25,9 +26,19 @@ def main():
     try:
         if args.action == "login":
             res = user.do_action(Action.LOGIN)
+
+            # Output login result by default if not silent
+            if not args.silent:
+                print(f"{res.get('username')} ({res.get('real_name')}) logged in")
+
         else:
             res = user.do_action(Action.LOGOUT)
 
+            # Output logout result by default if not silent
+            if not args.silent:
+                print(res.get("online_ip"), "logged out")
+
+        # Output direct result of response if verbose
         if args.verbose:
             print("\33[34m[Info]\033[0m", res)
 

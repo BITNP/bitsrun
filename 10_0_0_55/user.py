@@ -1,7 +1,7 @@
 import hmac
 import json
 from hashlib import sha1
-from typing import Dict
+from typing import Dict, Union
 
 from requests import Session
 
@@ -22,7 +22,7 @@ class User:
         self.ip, self.acid = parse_homepage()
         self.session = Session()
 
-    def do_action(self, action: Action):
+    def do_action(self, action: Action) -> Dict[str, Union[str, int]]:
         # Check current state - whether device is logged in and whether current user the same as the provided one
         is_logged_in, username = get_user_info()
 

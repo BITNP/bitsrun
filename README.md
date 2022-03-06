@@ -15,8 +15,8 @@ python -m pip install 10_0_0_55
 ### CLI
 
 ```bash
-python -m 10_0_0_55 login -u|--username xxxx -p|--password xxxx [-v|--verbose]
-python -m 10_0_0_55 logout -u|--username xxxx -p|--password xxxx [-v|--verbose]
+python -m 10_0_0_55 login -u|--username xxxx -p|--password xxxx [-s|--silent] [-v|--verbose]
+python -m 10_0_0_55 logout -u|--username xxxx -p|--password xxxx [-s|--silent] [-v|--verbose]
 ```
 
 ### Config file
@@ -31,8 +31,8 @@ Either `/etc/bit-user.json` or `~/.config/bit-user.json`:
 ```
 
 ```bash
-python -m 10_0_0_55 login [-v|--verbose]
-python -m 10_0_0_55 logout [-v|--verbose]
+python -m 10_0_0_55 login [-s|--silent] [-v|--verbose]
+python -m 10_0_0_55 logout [-s|--silent] [-v|--verbose]
 ```
 
 <details>
@@ -52,6 +52,8 @@ start 并且 enable NetworkManager-dispatcher
 
 ## Developing
 
+Install and run:
+
 ```bash
 # Create virtual env and install deps
 poetry install
@@ -60,7 +62,22 @@ poetry install
 poetry shell
 
 # ... normal stuff with python -m 10_0_0_55 ...
+```
 
+Build:
+
+```bash
 # Building the wheel
 poetry build
 ```
+
+Publish:
+
+```bash
+poetry version 2.x.x
+poetry publish
+```
+
+## License
+
+[WTFPL License](LICENSE)
