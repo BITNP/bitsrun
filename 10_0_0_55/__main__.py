@@ -52,6 +52,9 @@ def main():
         else:
             print("\033[91m[Error]", e, "\033[0m")
 
+        # Throw with error code 1 for scripts to pick up error state
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

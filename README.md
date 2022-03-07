@@ -15,9 +15,15 @@ python -m pip install 10_0_0_55
 ### CLI
 
 ```bash
-python -m 10_0_0_55 login -u|--username xxxx -p|--password xxxx [-s|--silent] [-nc|--no-color] [-v|--verbose]
-python -m 10_0_0_55 logout -u|--username xxxx -p|--password xxxx [-s|--silent] [-nc|--no-color] [-v|--verbose]
+python -m 10_0_0_55 login -u|--username xxxx -p|--password xxxx
+python -m 10_0_0_55 logout -u|--username xxxx -p|--password xxxx
 ```
+
+Optional params:
+
+- `-s|--silent`: No output what-so-ever.
+- `-nc|--no-color`: No color in error or verbose output.
+- `-v|--verbose`: Output verbose information including full response from the API.
 
 ### Config file
 
@@ -31,9 +37,15 @@ Either `/etc/bit-user.json` or `~/.config/bit-user.json`:
 ```
 
 ```bash
-python -m 10_0_0_55 login [-s|--silent] [-nc|--no-color] [-v|--verbose]
-python -m 10_0_0_55 logout [-s|--silent] [-nc|--no-color] [-v|--verbose]
+python -m 10_0_0_55 login
+python -m 10_0_0_55 logout
 ```
+
+### Raycast script (macOS)
+
+![Raycast Script Screenshot](assets/raycast-screenshot.png)
+
+Import the two Raycast scripts from [`./scripts`](./scripts/) and setup your config file in `~/.config/bit-user.json`. The script uses `/usr/bin/python3` by default, so you either need to install `10_0_0_55` with this Python interpreter or setup your own Python interpreter path in the script.
 
 <details>
 <summary>Using networkmanager-dispatcher (deprecated).</summary>
