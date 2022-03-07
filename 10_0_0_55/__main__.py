@@ -13,6 +13,7 @@ def main():
     parser.add_argument("-p", "--password")
     parser.add_argument("-v", "--verbose", action="store_true")
     parser.add_argument("-s", "--silent", action="store_true")
+    parser.add_argument("-nc", "--no-color", action="store_true")
     args = parser.parse_args()
 
     if args.username and args.password:
@@ -40,10 +41,16 @@ def main():
 
         # Output direct result of response if verbose
         if args.verbose:
-            print("\33[34m[Info]\033[0m", res)
+            if args.no_color:
+                print("Info:", res)
+            else:
+                print("\33[34m[Info]\033[0m", res)
 
     except Exception as e:
-        print("\033[91m[Error]", e, "\033[0m")
+        if args.no_color:
+            print("Error:", e)
+        else:
+            print("\033[91m[Error]", e, "\033[0m")
 
 
 if __name__ == "__main__":

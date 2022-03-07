@@ -15,8 +15,8 @@ python -m pip install 10_0_0_55
 ### CLI
 
 ```bash
-python -m 10_0_0_55 login -u|--username xxxx -p|--password xxxx [-s|--silent] [-v|--verbose]
-python -m 10_0_0_55 logout -u|--username xxxx -p|--password xxxx [-s|--silent] [-v|--verbose]
+python -m 10_0_0_55 login -u|--username xxxx -p|--password xxxx [-s|--silent] [-nc|--no-color] [-v|--verbose]
+python -m 10_0_0_55 logout -u|--username xxxx -p|--password xxxx [-s|--silent] [-nc|--no-color] [-v|--verbose]
 ```
 
 ### Config file
@@ -31,8 +31,8 @@ Either `/etc/bit-user.json` or `~/.config/bit-user.json`:
 ```
 
 ```bash
-python -m 10_0_0_55 login [-s|--silent] [-v|--verbose]
-python -m 10_0_0_55 logout [-s|--silent] [-v|--verbose]
+python -m 10_0_0_55 login [-s|--silent] [-nc|--no-color] [-v|--verbose]
+python -m 10_0_0_55 logout [-s|--silent] [-nc|--no-color] [-v|--verbose]
 ```
 
 <details>
