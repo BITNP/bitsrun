@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "10_0_0_55"
-version = "2.0.4"
+name = "bitsrun"
+version = "3.0.0"
 description = "A headless login / logout script for 10.0.0.55"
 authors = ["spencerwooo <spencer.woo@outlook.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">=3.8"
+python = ">=3.7"
 requests = "^2.27.1"
 
 [tool.poetry.dev-dependencies]
