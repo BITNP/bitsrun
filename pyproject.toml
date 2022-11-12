@@ -1,18 +1,21 @@
 [tool.poetry]
 name = "bitsrun"
-version = "3.0.0"
+version = "3.1.0"
 description = "A headless login / logout script for 10.0.0.55"
 authors = ["spencerwooo <spencer.woo@outlook.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">=3.7"
-requests = "^2.27.1"
+python = ">=3.7,<4"
+requests = "^2.28.1"
 
-[tool.poetry.dev-dependencies]
-black = "^22.1.0"
-flake8 = "^4.0.1"
+[tool.poetry.group.dev.dependencies]
+black = "^22.10.0"
+flake8 = "^5.0.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+bitsrun = "bitsrun.cli:main"

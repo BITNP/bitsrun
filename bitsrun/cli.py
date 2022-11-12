@@ -1,9 +1,9 @@
 import argparse
 import sys
 
-from .action import Action
-from .config import read_config
-from .user import User
+from bitsrun.action import Action
+from bitsrun.config import read_config
+from bitsrun.user import User
 
 
 def main():
@@ -27,10 +27,11 @@ def main():
     try:
         if args.action == "login":
             res = user.do_action(Action.LOGIN)
+            print(res)
 
             # Output login result by default if not silent
             if not args.silent:
-                print(f"{res.get('username')} ({res.get('real_name')}) logged in")
+                print(f"{res.get('username')} ({res.get('online_ip')}) logged in")
 
         else:
             res = user.do_action(Action.LOGOUT)

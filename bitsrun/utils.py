@@ -97,7 +97,12 @@ def xencode(msg, key) -> str:
         msg_len = len(msg)
         pwd = []
         for i in range(0, msg_len, 4):
-            pwd.append(ordat(msg, i) | ordat(msg, i + 1) << 8 | ordat(msg, i + 2) << 16 | ordat(msg, i + 3) << 24)
+            pwd.append(
+                ordat(msg, i)
+                | ordat(msg, i + 1) << 8
+                | ordat(msg, i + 2) << 16
+                | ordat(msg, i + 3) << 24
+            )
         if key:
             pwd.append(msg_len)
         return pwd
@@ -111,7 +116,12 @@ def xencode(msg, key) -> str:
                 return ""
             ll = m
         for i in range(0, msg_len):
-            msg[i] = chr(msg[i] & 0xFF) + chr(msg[i] >> 8 & 0xFF) + chr(msg[i] >> 16 & 0xFF) + chr(msg[i] >> 24 & 0xFF)
+            msg[i] = (
+                chr(msg[i] & 0xFF)
+                + chr(msg[i] >> 8 & 0xFF)
+                + chr(msg[i] >> 16 & 0xFF)
+                + chr(msg[i] >> 24 & 0xFF)
+            )
         if key:
             return "".join(msg)[0:ll]
         return "".join(msg)

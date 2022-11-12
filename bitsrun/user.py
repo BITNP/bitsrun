@@ -5,9 +5,13 @@ from typing import Dict, Union
 
 from requests import Session
 
-from .action import Action
-from .exception import AlreadyLoggedOutException, AlreadyOnlineException, UsernameUnmatchedException
-from .utils import fkbase64, get_user_info, parse_homepage, xencode
+from bitsrun.action import Action
+from bitsrun.exception import (
+    AlreadyLoggedOutException,
+    AlreadyOnlineException,
+    UsernameUnmatchedException,
+)
+from bitsrun.utils import fkbase64, get_user_info, parse_homepage, xencode
 
 API_BASE = "http://10.0.0.55"
 TYPE_CONST = 1
@@ -74,7 +78,14 @@ class User:
         info = "{SRBX1}" + fkbase64(xencode(json_data, token))
         chksum = sha1(
             "{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}".format(
-                token, self.username, hmd5, self.acid, self.ip, N_CONST, TYPE_CONST, info
+                token,
+                self.username,
+                hmd5,
+                self.acid,
+                self.ip,
+                N_CONST,
+                TYPE_CONST,
+                info,
             ).encode()
         ).hexdigest()
 
