@@ -14,4 +14,4 @@
 # @raycast.author Spencer Woo
 # @raycast.authorURL https://spencerwoo.com
 
-/usr/bin/python3 -m 10_0_0_55 logout --no-color
+bitsrun logout --no-color

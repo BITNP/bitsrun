@@ -4,10 +4,17 @@
 
 ## Install
 
-You need at least Python 3.7.
+You need at least Python 3.7. We recommend installing with `pipx`.
 
 ```bash
-python -m pip install bitsrun
+python3 -m pip install --user pipx
+python3 -m pipx ensurepath
+```
+
+After which, install `bitsrun` with `pipx`.
+
+```bash
+pipx install bitsrun
 ```
 
 ## Usage
@@ -15,8 +22,8 @@ python -m pip install bitsrun
 ### CLI
 
 ```bash
-python -m bitsrun login -u|--username xxxx -p|--password xxxx
-python -m bitsrun logout -u|--username xxxx -p|--password xxxx
+bitsrun login -u|--username xxxx -p|--password xxxx
+bitsrun logout -u|--username xxxx -p|--password xxxx
 ```
 
 Optional params:
@@ -37,8 +44,8 @@ Either `/etc/bit-user.json` or `~/.config/bit-user.json`:
 ```
 
 ```bash
-python -m bitsrun login
-python -m bitsrun logout
+bitsrun login
+bitsrun logout
 ```
 
 ### Raycast script (macOS)
