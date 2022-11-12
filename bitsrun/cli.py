@@ -27,7 +27,6 @@ def main():
     try:
         if args.action == "login":
             res = user.do_action(Action.LOGIN)
-            print(res)
 
             # Output login result by default if not silent
             if not args.silent:
