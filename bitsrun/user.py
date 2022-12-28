@@ -27,7 +27,8 @@ class User:
         self.session = Session()
 
     def do_action(self, action: Action) -> Dict[str, Union[str, int]]:
-        # Check current state - whether device is logged in and whether current user the same as the provided one
+        # Check current state - whether device is logged in
+        # and whether current user the same as the provided one
         is_logged_in, username = get_user_info()
 
         if is_logged_in and action is Action.LOGIN:
@@ -35,10 +36,12 @@ class User:
         if not is_logged_in and action is Action.LOGOUT:
             raise AlreadyLoggedOutException("you have already logged out")
 
-        # Raise exception only if username exists on this IP and command line arguments provided another username
+        # Raise exception only if username exists on this IP and
+        # command line arguments provided another username
         if username and username != self.username:
             raise UsernameUnmatchedException(
-                f"current logged in user {username} and provided username {self.username} does not match"
+                f"current logged in user {username} and "
+                f"provided username {self.username} does not match"
             )
 
         # Perform login or logout action
