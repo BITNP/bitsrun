@@ -79,13 +79,14 @@ poetry install
 
 # Enter poetry virtual env
 poetry shell
-
-# ... normal stuff with python -m bitsrun ...
 ```
 
 Build:
 
 ```bash
+# Bump version
+poetry version x.x.x
+
 # Building the wheel
 poetry build
 ```
@@ -93,7 +94,6 @@ poetry build
 Publish:
 
 ```bash
-poetry version 2.x.x
 poetry publish
 ```
 
