@@ -6,11 +6,6 @@ from typing import Dict, Union
 from requests import Session
 
 from bitsrun.action import Action
-from bitsrun.exception import (
-    AlreadyLoggedOutException,
-    AlreadyOnlineException,
-    UsernameUnmatchedException,
-)
 from bitsrun.utils import fkbase64, get_user_info, parse_homepage, xencode
 
 API_BASE = "http://10.0.0.55"
@@ -31,18 +26,17 @@ class User:
         # and whether current user the same as the provided one
         is_logged_in, username = get_user_info()
 
-        if is_logged_in and action is Action.LOGIN:
-            raise AlreadyOnlineException(f"{username}, you are already online")
-        if not is_logged_in and action is Action.LOGOUT:
-            raise AlreadyLoggedOutException("you have already logged out")
-
         # Raise exception only if username exists on this IP and
         # command line arguments provided another username
         if username and username != self.username:
-            raise UsernameUnmatchedException(
-                f"current logged in user {username} and "
-                f"provided username {self.username} does not match"
+            raise Exception(
+                f"Current logged in user ({username}) and "
+                f"yours ({self.username}) does not match"
             )
+        if is_logged_in and action is Action.LOGIN:
+            raise Exception(f"{username}, you are already online")
+        if not is_logged_in and action is Action.LOGOUT:
+            raise Exception("you have already logged out")
 
         # Perform login or logout action
         params = self._make_params(action)

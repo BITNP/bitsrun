@@ -1,53 +1,52 @@
-import argparse
 import sys
+import click
 
 from bitsrun.action import Action
 from bitsrun.config import read_config
 from bitsrun.user import User
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Login to BIT network")
-    parser.add_argument("action", choices=["login", "logout"], help="login or logout")
-    parser.add_argument("-u", "--username")
-    parser.add_argument("-p", "--password")
-    parser.add_argument("-v", "--verbose", action="store_true")
-    parser.add_argument("-s", "--silent", action="store_true")
-    parser.add_argument("-nc", "--no-color", action="store_true")
-    args = parser.parse_args()
-
-    if args.username and args.password:
-        user = User(args.username, args.password)
+@click.command()
+@click.argument("action", type=click.Choice(["login", "logout"]))
+@click.option("-u", "--username", help="Username.", required=False)
+@click.option("-p", "--password", help="Password.", required=False)
+@click.option("-v", "--verbose", is_flag=True, help="Verbose output.")
+@click.option("-s", "--silent", is_flag=True, help="Silent output.")
+@click.option("-nc", "--no-color", is_flag=True, help="No color output.")
+def main(action, username, password, verbose, silent, no_color):
+    """Login to the BIT network."""
+    if username and password:
+        user = User(username, password)
     elif conf := read_config():
         user = User(*conf)
     else:
-        parser.print_usage()
-        sys.exit(1)
+        ctx = click.get_current_context()
+        ctx.fail("No username/password provided.")
 
     try:
-        if args.action == "login":
+        if action == "login":
             res = user.do_action(Action.LOGIN)
 
             # Output login result by default if not silent
-            if not args.silent:
+            if not silent:
                 print(f"{res.get('username')} ({res.get('online_ip')}) logged in")
 
         else:
             res = user.do_action(Action.LOGOUT)
 
             # Output logout result by default if not silent
-            if not args.silent:
+            if not silent:
                 print(res.get("online_ip"), "logged out")
 
         # Output direct result of response if verbose
-        if args.verbose:
-            if args.no_color:
+        if verbose:
+            if no_color:
                 print("Info:", res)
             else:
                 print("\33[34m[Info]\033[0m", res)
 
     except Exception as e:
-        if args.no_color:
+        if no_color:
             print("Error:", e)
         else:
             print("\033[91m[Error]", e, "\033[0m")
