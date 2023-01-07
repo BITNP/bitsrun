@@ -32,9 +32,9 @@ Optional params:
 - `-nc|--no-color`: No color in error or verbose output.
 - `-v|--verbose`: Output verbose information including full response from the API.
 
-### Config file
+### Configuration file
 
-Either `/etc/bit-user.json` or `~/.config/bit-user.json`:
+Edit `bit-user.json`:
 
 ```json
 {
@@ -43,9 +43,25 @@ Either `/etc/bit-user.json` or `~/.config/bit-user.json`:
 }
 ```
 
+This file should be put under the following directory:
+
+- macOS: `~/Library/Preferences/bitsrun`
+- Windows: `%APPDATA%\bitsrun`
+- Unix: We follow the XDG spec and support `$XDG_CONFIG_HOME`. That means, by default `~/.config/bitsrun`.
+
+Now you can simply call
+
 ```bash
 bitsrun login
 bitsrun logout
+```
+
+Besides, a system-wide configuration file is supported, and the location also depends on your platform.
+
+To list all possible paths for your system (including those only for backward compatibility), call
+
+```shell
+bitsrun config-paths
 ```
 
 ### Raycast script (macOS)
