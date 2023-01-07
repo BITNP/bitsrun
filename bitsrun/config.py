@@ -1,21 +1,38 @@
 import json
-import os
+from os import getenv
+from pathlib import Path
+from sys import platform
 from typing import Optional, Tuple
 
+from platformdirs import site_config_path, user_config_path
 
-def get_config_path(filename: str) -> map:
-    paths = ["/etc/"]
-    if os.geteuid():
-        xdg_config_home = os.getenv("XDG_CONFIG_HOME")
-        if xdg_config_home:
-            paths.append(xdg_config_home)
+_APP_NAME = "bitsrun"
+
+
+def get_config_paths(filename: str) -> map:
+    paths = [
+        site_config_path(_APP_NAME, appauthor=False),
+        user_config_path(_APP_NAME, appauthor=False, roaming=True),
+    ]
+
+    # For backward compatibility
+    if not platform.startswith("win32"):
+        paths.insert(0, Path("/etc/"))
+
+        if platform.startswith("darwin"):
+            xdg_config_home = getenv("XDG_CONFIG_HOME", "")
+            if xdg_config_home.strip():
+                paths.append(Path(xdg_config_home))
+            else:
+                paths.append(Path.home() / ".config")
         else:
-            paths.append(os.path.expanduser("~/.config"))
-    return map(lambda path: os.path.join(path, filename), paths)
+            paths.append(user_config_path())
+
+    return map(lambda path: path / filename, paths)
 
 
 def read_config() -> Optional[Tuple[str, str]]:
-    paths = get_config_path("bit-user.json")
+    paths = get_config_paths("bit-user.json")
     for path in paths:
         try:
             with open(path) as f:
