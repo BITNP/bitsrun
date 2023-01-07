@@ -4,6 +4,8 @@ version = "3.2.0"
 description = "A headless login / logout script for 10.0.0.55"
 authors = ["spencerwooo <spencer.woo@outlook.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/BITNP/10_0_0_55_login"
 
 [tool.poetry.dependencies]
 python = ">=3.7,<4"
