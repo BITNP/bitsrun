@@ -9,7 +9,7 @@ from platformdirs import site_config_path, user_config_path
 _APP_NAME = "bitsrun"
 
 
-def get_config_paths(filename: str) -> map:
+def get_config_paths() -> map:
     paths = [
         site_config_path(_APP_NAME, appauthor=False),
         user_config_path(_APP_NAME, appauthor=False, roaming=True),
@@ -28,11 +28,11 @@ def get_config_paths(filename: str) -> map:
         else:
             paths.append(user_config_path())
 
-    return map(lambda path: path / filename, paths)
+    return map(lambda path: path / "bit-user.json", paths)
 
 
 def read_config() -> Optional[Tuple[str, str]]:
-    paths = get_config_paths("bit-user.json")
+    paths = get_config_paths()
     for path in paths:
         try:
             with open(path) as f:

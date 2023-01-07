@@ -2,19 +2,49 @@ import sys
 import click
 
 from bitsrun.action import Action
-from bitsrun.config import read_config
+from bitsrun.config import get_config_paths, read_config
 from bitsrun.user import User
 
 
-@click.command()
-@click.argument("action", type=click.Choice(["login", "logout"]))
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+def config_paths():
+    """List possible paths of the configuration file."""
+
+    click.echo("\n".join(map(str, get_config_paths())))
+
+
+@cli.command()
 @click.option("-u", "--username", help="Username.", required=False)
 @click.option("-p", "--password", help="Password.", required=False)
 @click.option("-v", "--verbose", is_flag=True, help="Verbose output.")
 @click.option("-s", "--silent", is_flag=True, help="Silent output.")
 @click.option("-nc", "--no-color", is_flag=True, help="No color output.")
-def main(action, username, password, verbose, silent, no_color):
-    """Login to the BIT network."""
+def login(username, password, verbose, silent, no_color):
+    """Log in the BIT network."""
+
+    do_action("login", username, password, verbose, silent, no_color)
+
+
+@cli.command()
+@click.option("-u", "--username", help="Username.", required=False)
+@click.option("-p", "--password", help="Password.", required=False)
+@click.option("-v", "--verbose", is_flag=True, help="Verbose output.")
+@click.option("-s", "--silent", is_flag=True, help="Silent output.")
+@click.option("-nc", "--no-color", is_flag=True, help="No color output.")
+def logout(username, password, verbose, silent, no_color):
+    """Log out the BIT network."""
+
+    do_action("logout", username, password, verbose, silent, no_color)
+
+
+def do_action(action, username, password, verbose, silent, no_color):
+    """Log in/out the BIT network."""
+
     if username and password:
         user = User(username, password)
     elif conf := read_config():
@@ -56,4 +86,4 @@ def main(action, username, password, verbose, silent, no_color):
 
 
 if __name__ == "__main__":
-    main()
+    cli()
