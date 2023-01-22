@@ -15,6 +15,8 @@ from bitsrun.user import User
 @click.option("-nc", "--no-color", is_flag=True, help="No color output.")
 def main(action, username, password, verbose, silent, no_color):
     """Login to the BIT network."""
+    if username and not password:
+        password = input("Please input the password: ")
     if username and password:
         user = User(username, password)
     elif conf := read_config():
