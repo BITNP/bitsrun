@@ -70,6 +70,8 @@ bitsrun config-paths
 
 ### Raycast script (macOS)
 
+![CleanShot 2023-01-22 at 21 55 40@2x](https://user-images.githubusercontent.com/32114380/213919582-eff6d58f-1bd2-47b2-a5da-46dc6e2eaffa.png)
+
 Import the two Raycast scripts from [`./scripts`](./scripts/) and setup your config file in `~/.config/bit-user.json`. The script uses `/usr/bin/python3` by default, so you either need to install `bitsrun` with this Python interpreter or setup your own Python interpreter path in the script.
 
 ## Developing
