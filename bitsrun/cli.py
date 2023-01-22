@@ -1,5 +1,6 @@
 import sys
 import click
+from getpass import getpass
 
 from bitsrun.action import Action
 from bitsrun.config import read_config
@@ -16,7 +17,7 @@ from bitsrun.user import User
 def main(action, username, password, verbose, silent, no_color):
     """Login to the BIT network."""
     if username and not password:
-        password = input("Please input the password: ")
+        password = getpass(prompt="Please enter your password: ")
     if username and password:
         user = User(username, password)
     elif conf := read_config():
