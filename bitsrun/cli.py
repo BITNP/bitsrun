@@ -44,7 +44,8 @@ def logout(username, password, verbose, silent, no_color):
 
 def do_action(action, username, password, verbose, silent, no_color):
     """Log in/out the BIT network."""
-
+    if username and not password:
+        password = input("Please input the password: ")
     if username and password:
         user = User(username, password)
     elif conf := read_config():
