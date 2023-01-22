@@ -1,10 +1,12 @@
 # bitsrun
 
-> A headless login / logout script for 10.0.0.55 at BIT.
+![PyPI](https://img.shields.io/pypi/v/bitsrun) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/bitsrun) ![PyPI - Downloads](https://img.shields.io/pypi/dm/bitsrun)
+
+_A headless login / logout script for 10.0.0.55 at BIT._
 
 ## Install
 
-You need at least Python 3.8. We recommend installing with `pipx`.
+You need at least **Python 3.8**. We recommend installing with `pipx`.
 
 ```bash
 python3 -m pip install --user pipx
@@ -21,16 +23,19 @@ pipx install bitsrun
 
 ### CLI
 
-```bash
-bitsrun login -u|--username xxxx -p|--password xxxx
-bitsrun logout -u|--username xxxx -p|--password xxxx
+```text
+Usage: bitsrun login/logout [OPTIONS]
+
+  Log in/out the BIT network.
+
+Options:
+  -u, --username TEXT  Username.
+  -p, --password TEXT  Password.
+  -v, --verbose        Verbose output.
+  -s, --silent         Silent output.
+  -nc, --no-color      No color output.
+  --help               Show this message and exit.
 ```
-
-Optional params:
-
-- `-s|--silent`: No output what-so-ever.
-- `-nc|--no-color`: No color in error or verbose output.
-- `-v|--verbose`: Output verbose information including full response from the API.
 
 ### Configuration file
 
@@ -64,8 +69,6 @@ bitsrun config-paths
 ```
 
 ### Raycast script (macOS)
-
-![Raycast Script Screenshot](assets/raycast-screenshot.png)
 
 Import the two Raycast scripts from [`./scripts`](./scripts/) and setup your config file in `~/.config/bit-user.json`. The script uses `/usr/bin/python3` by default, so you either need to install `bitsrun` with this Python interpreter or setup your own Python interpreter path in the script.
 
