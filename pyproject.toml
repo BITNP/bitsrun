@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bitsrun"
-version = "3.2.1"
+version = "3.2.2"
 description = "A headless login / logout script for 10.0.0.55"
 authors = ["spencerwooo <spencer.woo@outlook.com>"]
 license = "MIT"
