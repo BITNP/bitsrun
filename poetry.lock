@@ -83,7 +83,7 @@ python-versions = ">=3.7"
 name = "platformdirs"
 version = "2.6.2"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -149,7 +149,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<4"
-content-hash = "a902cdae0c70c168f0a517dde5c19c1440f4b4e99529762c6faee34a197e5ce2"
+content-hash = "b3ec4b5eb677a3d54299a2c28bc2910044f78485a0727f51033d60372b70ca02"
 
 [metadata.files]
 black = [
