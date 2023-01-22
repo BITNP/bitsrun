@@ -4,7 +4,7 @@
 
 ## Install
 
-You need at least Python 3.7. We recommend installing with `pipx`.
+You need at least Python 3.8. We recommend installing with `pipx`.
 
 ```bash
 python3 -m pip install --user pipx

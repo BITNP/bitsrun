@@ -1,5 +1,6 @@
 import sys
 import click
+from getpass import getpass
 
 from bitsrun.action import Action
 from bitsrun.config import get_config_paths, read_config
@@ -45,7 +46,7 @@ def logout(username, password, verbose, silent, no_color):
 def do_action(action, username, password, verbose, silent, no_color):
     """Log in/out the BIT network."""
     if username and not password:
-        password = input("Please input the password: ")
+        password = getpass(prompt="Please enter your password: ")
     if username and password:
         user = User(username, password)
     elif conf := read_config():
