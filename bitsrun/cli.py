@@ -1,12 +1,33 @@
 import sys
-import click
 from getpass import getpass
+
+import click
 
 from bitsrun.action import Action
 from bitsrun.config import get_config_paths, read_config
 from bitsrun.user import User
 
+# A hacky way to specify shared options for multiple click commands:
+# https://stackoverflow.com/questions/40182157/shared-options-and-flags-between-commands
+_options = [
+    click.option("-u", "--username", help="Username.", required=False),
+    click.option("-p", "--password", help="Password.", required=False),
+    click.option("-v", "--verbose", is_flag=True, help="Verbose output."),
+    click.option("-s", "--silent", is_flag=True, help="Silent output."),
+    click.option("-nc", "--no-color", is_flag=True, help="No color output."),
+]
 
+
+def add_options(options):
+    def _add_options(func):
+        for option in reversed(options):
+            func = option(func)
+        return func
+
+    return _add_options
+
+
+# Declaration of the main command group starts here
 @click.group()
 def cli():
     pass
@@ -15,32 +36,21 @@ def cli():
 @cli.command()
 def config_paths():
     """List possible paths of the configuration file."""
-
     click.echo("\n".join(map(str, get_config_paths())))
 
 
 @cli.command()
-@click.option("-u", "--username", help="Username.", required=False)
-@click.option("-p", "--password", help="Password.", required=False)
-@click.option("-v", "--verbose", is_flag=True, help="Verbose output.")
-@click.option("-s", "--silent", is_flag=True, help="Silent output.")
-@click.option("-nc", "--no-color", is_flag=True, help="No color output.")
-def login(username, password, verbose, silent, no_color):
-    """Log in the BIT network."""
-
-    do_action("login", username, password, verbose, silent, no_color)
+@add_options(_options)
+def login(kwargs):
+    """Log into the BIT network."""
+    do_action("login", **kwargs)
 
 
 @cli.command()
-@click.option("-u", "--username", help="Username.", required=False)
-@click.option("-p", "--password", help="Password.", required=False)
-@click.option("-v", "--verbose", is_flag=True, help="Verbose output.")
-@click.option("-s", "--silent", is_flag=True, help="Silent output.")
-@click.option("-nc", "--no-color", is_flag=True, help="No color output.")
-def logout(username, password, verbose, silent, no_color):
-    """Log out the BIT network."""
-
-    do_action("logout", username, password, verbose, silent, no_color)
+@add_options(_options)
+def logout(kwargs):
+    """Log out of the BIT network."""
+    do_action("logout", **kwargs)
 
 
 def do_action(action, username, password, verbose, silent, no_color):
