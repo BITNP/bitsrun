@@ -1,6 +1,6 @@
 # bitsrun
 
-![PyPI](https://img.shields.io/pypi/v/bitsrun) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/bitsrun) ![PyPI - Downloads](https://img.shields.io/pypi/dm/bitsrun)
+[![PyPI](https://img.shields.io/pypi/v/bitsrun)](https://pypi.org/project/bitsrun/) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/bitsrun) ![PyPI - Downloads](https://img.shields.io/pypi/dm/bitsrun)
 
 _A headless login / logout script for 10.0.0.55 at BIT._
 
