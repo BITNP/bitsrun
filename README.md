@@ -26,16 +26,17 @@ pipx install bitsrun
 ```text
 Usage: bitsrun login/logout [OPTIONS]
 
-  Log in/out the BIT network.
+  Log into or out of the BIT network.
 
 Options:
   -u, --username TEXT  Username.
   -p, --password TEXT  Password.
-  -v, --verbose        Verbose output.
-  -s, --silent         Silent output.
-  -nc, --no-color      No color output.
+  -v, --verbose        Verbosely echo API response.
+  -s, --silent         Silent, no output to stdout.
   --help               Show this message and exit.
 ```
+
+> **Note**: this is the output of `bitsrun login/logout --help`.
 
 ### Configuration file
 

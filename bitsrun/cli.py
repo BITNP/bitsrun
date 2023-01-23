@@ -12,9 +12,8 @@ from bitsrun.user import User
 _options = [
     click.option("-u", "--username", help="Username.", required=False),
     click.option("-p", "--password", help="Password.", required=False),
-    click.option("-v", "--verbose", is_flag=True, help="Verbose output."),
-    click.option("-s", "--silent", is_flag=True, help="Silent output."),
-    click.option("-nc", "--no-color", is_flag=True, help="No color output."),
+    click.option("-v", "--verbose", is_flag=True, help="Verbosely echo API response."),
+    click.option("-s", "--silent", is_flag=True, help="Silent, no output to stdout."),
 ]
 
 
@@ -29,6 +28,7 @@ def add_options(options):
 
 # Declaration of the main command group starts here
 @click.group()
+@click.version_option()
 def cli():
     pass
 
@@ -41,16 +41,16 @@ def config_paths():
 
 @cli.command()
 @add_options(_options)
-def login(kwargs):
+def login(username, password, verbose, silent, no_color):
     """Log into the BIT network."""
-    do_action("login", **kwargs)
+    do_action("login", username, password, verbose, silent, no_color)
 
 
 @cli.command()
 @add_options(_options)
-def logout(kwargs):
+def logout(username, password, verbose, silent, no_color):
     """Log out of the BIT network."""
-    do_action("logout", **kwargs)
+    do_action("logout", username, password, verbose, silent, no_color)
 
 
 def do_action(action, username, password, verbose, silent, no_color):
@@ -71,27 +71,21 @@ def do_action(action, username, password, verbose, silent, no_color):
 
             # Output login result by default if not silent
             if not silent:
-                print(f"{res.get('username')} ({res.get('online_ip')}) logged in")
+                click.echo(f"{res.get('username')} ({res.get('online_ip')}) logged in")
 
         else:
             res = user.do_action(Action.LOGOUT)
 
             # Output logout result by default if not silent
             if not silent:
-                print(res.get("online_ip"), "logged out")
+                click.echo(res.get("online_ip"), "logged out")
 
         # Output direct result of response if verbose
         if verbose:
-            if no_color:
-                print("Info:", res)
-            else:
-                print("\33[34m[Info]\033[0m", res)
+            click.secho(f"Info: {res}", fg="blue")
 
     except Exception as e:
-        if no_color:
-            print("Error:", e)
-        else:
-            print("\033[91m[Error]", e, "\033[0m")
+        click.secho(f"[Error] {e}", fg="red")
 
         # Throw with error code 1 for scripts to pick up error state
         sys.exit(1)
