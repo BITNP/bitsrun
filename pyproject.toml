@@ -23,3 +23,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 bitsrun = "bitsrun.cli:cli"
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "I", "N", "B", "SIM"]

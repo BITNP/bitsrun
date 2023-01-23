@@ -141,7 +141,7 @@ def xencode(msg, key) -> str:
     p = 0
     q = math.floor(6 + 52 / (n + 1))
     d = 0
-    while 0 < q:
+    while q > 0:
         d = d + c & (0x8CE0D9BF | 0x731F2640)
         e = d >> 2 & 3
         p = 0
