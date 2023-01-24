@@ -1,6 +1,6 @@
 # bitsrun
 
-[![PyPI](https://img.shields.io/pypi/v/bitsrun)](https://pypi.org/project/bitsrun/) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/bitsrun) ![PyPI - Downloads](https://img.shields.io/pypi/dm/bitsrun)
+[![Pre-commit](https://github.com/BITNP/bitsrun/actions/workflows/ci.yml/badge.svg)](https://github.com/BITNP/bitsrun/actions/workflows/ci.yml) [![PyPI Publish](https://github.com/BITNP/bitsrun/actions/workflows/python-publish.yml/badge.svg)](https://github.com/BITNP/bitsrun/actions/workflows/python-publish.yml) [![PyPI](https://img.shields.io/pypi/v/bitsrun)](https://pypi.org/project/bitsrun/) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/bitsrun) ![PyPI - Downloads](https://img.shields.io/pypi/dm/bitsrun)
 
 _A headless login / logout script for 10.0.0.55 at BIT._
 
@@ -108,7 +108,7 @@ poetry publish
 
 ## Credits
 
-* [Aloxaf/10_0_0_55_login](https://github.com/Aloxaf/10_0_0_55_login)
+- [Aloxaf/10_0_0_55_login](https://github.com/Aloxaf/10_0_0_55_login)
 
 ## License
 
