@@ -25,7 +25,7 @@ class UserResponseType(TypedDict):
     error: Union[Literal["login_error"], Literal["ok"]]
     error_msg: str
     res: Union[Literal["login_error"], Literal["ok"]]
-    # On login fails and all logout scenarios, field `username` is not present
+    # Field `username` is not present on login fails and all logout scenarios
     username: Optional[str]
 
 

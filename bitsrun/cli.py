@@ -72,13 +72,15 @@ def do_action(action, username, password, verbose):
             )
     else:
         ctx = click.get_current_context()
-        ctx.fail("No username/password provided")
+        ctx.fail("No username or password provided")
 
     try:
         if action == "login":
-            res = user.login()
+            resp = user.login()
+            message = f"{resp['username']} ({resp['online_ip']}) logged in"
         elif action == "logout":
-            res = user.logout()
+            resp = user.logout()
+            message = f"{resp['online_ip']} logged out"
         else:
             # Should not reach here, but just in case
             raise ValueError(f"Unknown action `{action}`")
@@ -86,20 +88,22 @@ def do_action(action, username, password, verbose):
         # Output direct result of the API response if verbose
         if verbose:
             click.echo(f"{click.style('bitsrun:', fg='cyan')} Response from API:")
-            # click.echo(res)
-            pprint(res)
+            pprint(resp, indent=4)
 
         # Handle error from API response. When field `error` is not `ok`, then the
-        # login/logout action has likely failed.
-        if res["error"] != "ok":
-            raise Exception(res["error"])
+        # login/logout action has likely failed. Hints are provided in the `error_msg`.
+        if resp["error"] != "ok":
+            raise Exception(
+                resp["error_msg"]
+                if resp["error_msg"]
+                else "Action failed, use --verbose for more info"
+            )
 
-        click.echo(
-            click.style("bitsrun: ", fg="green")
-            + f"{res.get('username', user.username)} ({res['online_ip']}) logged in"
-        )
+        # Print success message
+        click.echo(f"{click.style('bitsrun:', fg='green')} {message}")
 
     except Exception as e:
+        # Exception is caught and printed to stderr
         click.echo(f"{click.style('error:', fg='red')} {e}", err=True)
         # Throw with error code 1 for scripts to pick up error state
         sys.exit(1)
