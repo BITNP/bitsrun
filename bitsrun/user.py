@@ -49,7 +49,7 @@ class User:
         result = json.loads(response.text[6:-1])
         return result["challenge"]
 
-    def _make_params(self, action: Action) -> Dict[str, str]:
+    def _make_params(self, action: Action) -> Dict[str, Union[int, str]]:
         token = self._get_token()
 
         params = {

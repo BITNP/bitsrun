@@ -79,7 +79,7 @@ def do_action(action, username, password, verbose, silent):
 
             # Output logout result by default if not silent
             if not silent:
-                click.echo(res.get("online_ip"), "logged out")
+                click.echo(f"{res.get('online_ip')} logged out")
 
         # Output direct result of response if verbose
         if verbose:
