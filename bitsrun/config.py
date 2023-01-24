@@ -2,7 +2,7 @@ import json
 from os import getenv
 from pathlib import Path
 from sys import platform
-from typing import Optional, Tuple
+from typing import Optional, Tuple, TypedDict
 
 from platformdirs import site_config_path, user_config_path
 
@@ -49,7 +49,12 @@ def get_config_paths() -> map:
     return map(lambda path: path / "bit-user.json", paths)
 
 
-def read_config() -> Optional[Tuple[str, str]]:
+class ConfigType(TypedDict):
+    username: str
+    password: str
+
+
+def read_config() -> Optional[Tuple[ConfigType, str]]:
     """Read config from the first available config file with name `bit-user.json`.
 
     The config file should be a JSON file with the following structure:
@@ -59,7 +64,7 @@ def read_config() -> Optional[Tuple[str, str]]:
     ```
 
     Returns:
-        A tuple of (username, password) if the config file is found.
+        A tuple of (config, path to config file) if the config file is found.
     """
 
     paths = get_config_paths()
@@ -67,7 +72,7 @@ def read_config() -> Optional[Tuple[str, str]]:
         try:
             with open(path) as f:
                 data = json.loads(f.read())
-                return data["username"], data["password"]
+                return data, str(path)
         except Exception:
             continue
     return None

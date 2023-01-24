@@ -29,10 +29,9 @@ Usage: bitsrun login/logout [OPTIONS]
   Log into or out of the BIT network.
 
 Options:
-  -u, --username TEXT  Username.
-  -p, --password TEXT  Password.
+  -u, --username TEXT  Your username.
+  -p, --password TEXT  Your password.
   -v, --verbose        Verbosely echo API response.
-  -s, --silent         Silent, no output to stdout.
   --help               Show this message and exit.
 ```
 
