@@ -77,7 +77,7 @@ def do_action(action, username, password, verbose):
     try:
         if action == "login":
             resp = user.login()
-            message = f"{resp['username']} ({resp['online_ip']}) logged in"
+            message = f"{user.username} ({resp['online_ip']}) logged in"
         elif action == "logout":
             resp = user.logout()
             message = f"{resp['online_ip']} logged out"
