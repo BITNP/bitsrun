@@ -105,6 +105,10 @@ Publish:
 poetry publish
 ```
 
+## Credits
+
+* [Aloxaf/10_0_0_55_login](https://github.com/Aloxaf/10_0_0_55_login)
+
 ## License
 
 [WTFPL License](LICENSE)
