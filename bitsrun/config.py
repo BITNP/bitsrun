@@ -10,6 +10,24 @@ _APP_NAME = "bitsrun"
 
 
 def get_config_paths() -> map:
+    r"""Enumerate possible paths of the configuration file.
+
+    On Windows, the possible paths are:
+
+    - `C:\ProgramData\bitsrun\bit-user.json`
+    - `~\AppData\Roaming\bitsrun\bit-user.json`
+
+    On macOS and Linux:
+
+    - `/etc/bitsrun/bit-user.json`
+    - `$XDG_CONFIG_HOME/bitsrun/bit-user.json`
+    - `~/.config/bitsrun/bit-user.json`
+    - `~/.config/bit-user.json`
+
+    Returns:
+        A map of possible paths of the configuration file based on the current platform.
+    """
+
     paths = [
         site_config_path(_APP_NAME, appauthor=False),
         user_config_path(_APP_NAME, appauthor=False, roaming=True),
@@ -32,6 +50,18 @@ def get_config_paths() -> map:
 
 
 def read_config() -> Optional[Tuple[str, str]]:
+    """Read config from the first available config file with name `bit-user.json`.
+
+    The config file should be a JSON file with the following structure:
+
+    ```json
+    { "username": "xxxx", "password": "xxxx" }
+    ```
+
+    Returns:
+        A tuple of (username, password) if the config file is found.
+    """
+
     paths = get_config_paths()
     for path in paths:
         try:

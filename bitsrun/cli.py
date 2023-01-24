@@ -3,7 +3,6 @@ from getpass import getpass
 
 import click
 
-from bitsrun.action import Action
 from bitsrun.config import get_config_paths, read_config
 from bitsrun.user import User
 
@@ -68,26 +67,29 @@ def do_action(action, username, password, verbose, silent):
 
     try:
         if action == "login":
-            res = user.do_action(Action.LOGIN)
+            res = user.login()
 
             # Output login result by default if not silent
             if not silent:
                 click.echo(f"{res.get('username')} ({res.get('online_ip')}) logged in")
 
-        else:
-            res = user.do_action(Action.LOGOUT)
+        elif action == "logout":
+            res = user.logout()
 
             # Output logout result by default if not silent
             if not silent:
                 click.echo(f"{res.get('online_ip')} logged out")
 
+        else:
+            # Should not reach here, but just in case
+            raise ValueError(f"unknown action `{action}`")
+
         # Output direct result of response if verbose
         if verbose:
-            click.secho(f"Info: {res}", fg="blue")
+            click.echo(f"{click.style('info:', fg='blue')} {res}")
 
     except Exception as e:
-        click.secho(f"Error: {e}", fg="red")
-
+        click.echo(f"{click.style('error:', fg='red')} {e}")
         # Throw with error code 1 for scripts to pick up error state
         sys.exit(1)
 
