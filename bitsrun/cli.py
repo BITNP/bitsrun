@@ -17,6 +17,7 @@ _options = [
 ]
 
 
+# Decorator to add options to a click command (used w/ the hack above)
 def add_options(options):
     def _add_options(func):
         for option in reversed(options):
@@ -41,19 +42,19 @@ def config_paths():
 
 @cli.command()
 @add_options(_options)
-def login(username, password, verbose, silent, no_color):
+def login(username, password, verbose, silent):
     """Log into the BIT network."""
-    do_action("login", username, password, verbose, silent, no_color)
+    do_action("login", username, password, verbose, silent)
 
 
 @cli.command()
 @add_options(_options)
-def logout(username, password, verbose, silent, no_color):
+def logout(username, password, verbose, silent):
     """Log out of the BIT network."""
-    do_action("logout", username, password, verbose, silent, no_color)
+    do_action("logout", username, password, verbose, silent)
 
 
-def do_action(action, username, password, verbose, silent, no_color):
+def do_action(action, username, password, verbose, silent):
     """Log in/out the BIT network."""
     if username and not password:
         password = getpass(prompt="Please enter your password: ")
@@ -85,7 +86,7 @@ def do_action(action, username, password, verbose, silent, no_color):
             click.secho(f"Info: {res}", fg="blue")
 
     except Exception as e:
-        click.secho(f"[Error] {e}", fg="red")
+        click.secho(f"Error: {e}", fg="red")
 
         # Throw with error code 1 for scripts to pick up error state
         sys.exit(1)
