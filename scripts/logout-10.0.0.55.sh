@@ -14,4 +14,4 @@
 # @raycast.author Spencer Woo
 # @raycast.authorURL https://spencerwoo.com
 
-bitsrun logout --no-color
+bitsrun logout
