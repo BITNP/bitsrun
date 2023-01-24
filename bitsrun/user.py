@@ -2,15 +2,15 @@ import hmac
 import json
 from enum import Enum
 from hashlib import sha1
-from typing import Dict, Optional, Union
+from typing import Dict, Literal, Optional, TypedDict, Union
 
 from requests import Session
 
 from bitsrun.utils import fkbase64, parse_homepage, xencode
 
-API_BASE = "http://10.0.0.55"
-TYPE_CONST = 1
-N_CONST = 200
+_API_BASE = "http://10.0.0.55"
+_TYPE_CONST = 1
+_N_CONST = 200
 
 
 class Action(Enum):
@@ -18,15 +18,24 @@ class Action(Enum):
     LOGOUT = "logout"
 
 
+class UserResponseType(TypedDict):
+    client_ip: str
+    online_ip: str
+    error: Union[Literal["login_error"], Literal["ok"]]
+    error_msg: str
+    res: Union[Literal["login_error"], Literal["ok"]]
+    username: Optional[str]
+
+
 class User:
     def __init__(self, username: str, password: str):
         self.username = username
         self.password = password
 
-        self.ip, self.acid = parse_homepage(api_base=API_BASE)
+        self.ip, self.acid = parse_homepage(api_base=_API_BASE)
         self.session = Session()
 
-    def login(self) -> Dict[str, Union[str, int]]:
+    def login(self) -> UserResponseType:
         logged_in_user = self._user_validate()
 
         # Raise exception if device is already logged in
@@ -35,7 +44,7 @@ class User:
 
         return self._do_action(Action.LOGIN)
 
-    def logout(self) -> Dict[str, Union[str, int]]:
+    def logout(self) -> UserResponseType:
         logged_in_user = self._user_validate()
 
         # Raise exception if device is not logged in
@@ -44,9 +53,9 @@ class User:
 
         return self._do_action(Action.LOGOUT)
 
-    def _do_action(self, action: Action) -> Dict[str, Union[str, int]]:
+    def _do_action(self, action: Action) -> UserResponseType:
         params = self._make_params(action)
-        response = self.session.get(API_BASE + "/cgi-bin/srun_portal", params=params)
+        response = self.session.get(_API_BASE + "/cgi-bin/srun_portal", params=params)
         return json.loads(response.text[6:-1])
 
     def _get_user_info(self) -> Optional[str]:
@@ -56,7 +65,7 @@ class User:
             The username of the current logged in user if exists.
         """
 
-        resp = self.session.get(API_BASE + "/cgi-bin/rad_user_info")
+        resp = self.session.get(_API_BASE + "/cgi-bin/rad_user_info")
         data = resp.text
 
         if data == "not_online_error":
@@ -88,7 +97,7 @@ class User:
 
     def _get_token(self) -> str:
         params = {"callback": "jsonp", "username": self.username, "ip": self.ip}
-        response = self.session.get(API_BASE + "/cgi-bin/get_challenge", params=params)
+        response = self.session.get(_API_BASE + "/cgi-bin/get_challenge", params=params)
         result = json.loads(response.text[6:-1])
         return result["challenge"]
 
@@ -101,8 +110,8 @@ class User:
             "action": action.value,
             "ac_id": self.acid,
             "ip": self.ip,
-            "type": TYPE_CONST,
-            "n": N_CONST,
+            "type": _TYPE_CONST,
+            "n": _N_CONST,
         }
 
         data = {
@@ -123,8 +132,8 @@ class User:
                 hmd5,
                 self.acid,
                 self.ip,
-                N_CONST,
-                TYPE_CONST,
+                _N_CONST,
+                _TYPE_CONST,
                 info,
             ).encode()
         ).hexdigest()
