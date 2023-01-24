@@ -88,7 +88,7 @@ def do_action(action, username, password, verbose):
         # Output direct result of the API response if verbose
         if verbose:
             click.echo(f"{click.style('bitsrun:', fg='cyan')} Response from API:")
-            pprint(resp, indent=4)
+            pprint(resp)
 
         # Handle error from API response. When field `error` is not `ok`, then the
         # login/logout action has likely failed. Hints are provided in the `error_msg`.
