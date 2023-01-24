@@ -21,9 +21,11 @@ class Action(Enum):
 class UserResponseType(TypedDict):
     client_ip: str
     online_ip: str
+    # Field `error` is also `login_error` when logout action fails
     error: Union[Literal["login_error"], Literal["ok"]]
     error_msg: str
     res: Union[Literal["login_error"], Literal["ok"]]
+    # On login fails and all logout scenarios, field `username` is not present
     username: Optional[str]
 
 

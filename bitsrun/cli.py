@@ -1,5 +1,6 @@
 import sys
 from getpass import getpass
+from pprint import pprint
 
 import click
 
@@ -84,7 +85,9 @@ def do_action(action, username, password, verbose):
 
         # Output direct result of the API response if verbose
         if verbose:
-            click.echo(f"{click.style('bitsrun:', fg='blue')} {res}")
+            click.echo(f"{click.style('bitsrun:', fg='cyan')} Response from API:")
+            # click.echo(res)
+            pprint(res)
 
         # Handle error from API response. When field `error` is not `ok`, then the
         # login/logout action has likely failed.
@@ -93,11 +96,11 @@ def do_action(action, username, password, verbose):
 
         click.echo(
             click.style("bitsrun: ", fg="green")
-            + f"{res['username']} ({res['online_ip']}) logged in"
+            + f"{res.get('username', user.username)} ({res['online_ip']}) logged in"
         )
 
     except Exception as e:
-        click.echo(f"{click.style('error:', fg='red')} {e}")
+        click.echo(f"{click.style('error:', fg='red')} {e}", err=True)
         # Throw with error code 1 for scripts to pick up error state
         sys.exit(1)
 
