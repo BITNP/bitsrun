@@ -1,26 +1,24 @@
 import math
 from base64 import b64encode
 from html.parser import HTMLParser
-from typing import Optional, Tuple
+from typing import Tuple
 from urllib.parse import parse_qs, urlparse
 
 import requests
 
-API_BASE = "http://10.0.0.55"
 
-
-def parse_homepage() -> Tuple[str, str]:
-    """Parse homepage of 10.0.0.55 and get the acid + ip of current session
+def parse_homepage(api_base: str) -> Tuple[str, str]:
+    """Parse homepage of 10.0.0.55 and get the acid + ip of current session.
 
     Raises:
-        Exception: Throw exception if acid not present in the redirected URL
-        Exception: Throw exception if response text does not contain IP
+        Exception: Throw exception if acid not present in the redirected URL.
+        Exception: Throw exception if response text does not contain IP.
 
     Returns:
-        Tuple[str, str]: Both the ip and the acid of the current session
+        A tuple of (ip, acid) of the current session.
     """
 
-    res = requests.get(API_BASE)
+    res = requests.get(api_base)
 
     # ac_id appears in the url query parameter of the redirected URL
     query = parse_qs(urlparse(res.url).query)
@@ -52,29 +50,6 @@ def parse_homepage() -> Tuple[str, str]:
         raise Exception("failed to get ip")
 
     return ip, ac_id[0]
-
-
-def get_user_info() -> Tuple[bool, Optional[str]]:
-    """Get current logged in user info if exists
-
-    Returns:
-        tuple[bool, Optional[str]]
-        - a boolean indicating whether the current IP is logged in
-        - the username of the current logged in user if exists
-    """
-
-    is_logged_in = True
-    username = None
-
-    resp = requests.get(API_BASE + "/cgi-bin/rad_user_info")
-    data = resp.text
-
-    if data == "not_online_error":
-        is_logged_in = False
-    else:
-        username = data.split(",")[0]
-
-    return is_logged_in, username
 
 
 def fkbase64(raw_s: str) -> str:
