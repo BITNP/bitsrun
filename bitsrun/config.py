@@ -17,12 +17,21 @@ def get_config_paths() -> map:
     - `C:\ProgramData\bitsrun\bit-user.json`
     - `~\AppData\Roaming\bitsrun\bit-user.json`
 
-    On macOS and Linux:
+    On Linux:
 
     - `/etc/bitsrun/bit-user.json`
+    - `/etc/xdg/bitsrun/bit-user.json`
     - `$XDG_CONFIG_HOME/bitsrun/bit-user.json`
     - `~/.config/bitsrun/bit-user.json`
     - `~/.config/bit-user.json`
+
+    On macOS:
+
+    - `/etc/bit-user.json`
+    - `/Library/Preferences/bitsrun/bit-user.json`
+    - `$HOME/Library/Preferences/bitsrun/bit-user.json`
+    - `$HOME/.config/bit-user.json`
+    - `$HOME/.config/bitsrun/bit-user.json`
 
     Returns:
         A map of possible paths of the configuration file based on the current platform.
@@ -43,6 +52,7 @@ def get_config_paths() -> map:
                 paths.append(Path(xdg_config_home))
             else:
                 paths.append(Path.home() / ".config")
+            paths.append(paths[-1] / _APP_NAME)
         else:
             paths.append(user_config_path())
 

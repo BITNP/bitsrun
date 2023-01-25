@@ -8,14 +8,14 @@ _A headless login / logout script for 10.0.0.55 at BIT._
 
 You need at least **Python 3.8**. We recommend installing with `pipx`.
 
-```bash
+```shell
 python3 -m pip install --user pipx
 python3 -m pipx ensurepath
 ```
 
 After which, install `bitsrun` with `pipx`.
 
-```bash
+```shell
 pipx install bitsrun
 ```
 
@@ -55,7 +55,7 @@ This file should be put under the following directory:
 
 Now you can simply call:
 
-```bash
+```shell
 bitsrun login
 bitsrun logout
 ```
@@ -78,7 +78,7 @@ Import the two Raycast scripts from [`./scripts`](./scripts/) and setup your con
 
 Install and run:
 
-```bash
+```shell
 # Create virtual env and install deps
 poetry install
 
@@ -91,7 +91,7 @@ pre-commit install
 
 Build:
 
-```bash
+```shell
 # Bump version
 poetry version x.x.x
 
@@ -101,7 +101,7 @@ poetry build
 
 Publish:
 
-```bash
+```shell
 poetry publish
 ```
 
