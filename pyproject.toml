@@ -3,7 +3,7 @@ name = "bitsrun"
 version = "3.3.0"
 description = "A headless login / logout script for 10.0.0.55"
 authors = ["spencerwooo <spencer.woo@outlook.com>"]
-license = "MIT"
+license = "WTFPL"
 readme = "README.md"
 homepage = "https://github.com/BITNP/bitsrun"
 
