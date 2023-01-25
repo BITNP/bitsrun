@@ -21,7 +21,6 @@ def get_config_paths() -> map:
 
     - `/etc/bitsrun/bit-user.json`
     - `/etc/xdg/bitsrun/bit-user.json`
-    - `$XDG_CONFIG_HOME/bitsrun/bit-user.json`
     - `~/.config/bitsrun/bit-user.json`
     - `~/.config/bit-user.json`
 
