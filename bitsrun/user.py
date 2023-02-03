@@ -43,6 +43,29 @@ class LoginStatusRespType(TypedDict):
     wallet_balance: Optional[int]
 
 
+def get_login_status(client: Optional[httpx.Client] = None) -> LoginStatusRespType:
+    """Get current login status of the device.
+
+    Note:
+        This function is also used without initializing a `User` instance. As such,
+        the `client` argument is optional and will be initialized if not provided.
+
+    Args:
+        client: An optional reused httpx client if provided. Defaults to None.
+
+    Returns:
+        The login status of the current device. If the device is logged in, the
+        `user_name` field will be present. Otherwise, it will be `None`. As such,
+        the presence of `user_name` is used to check if the device is logged in.
+    """
+
+    if not client:
+        client = httpx.Client(base_url=_API_BASE)
+
+    resp = client.get("/cgi-bin/rad_user_info", params={"callback": "jsonp"})
+    return json.loads(resp.text[6:-1])
+
+
 class User:
     def __init__(self, username: str, password: str):
         self.username = username
@@ -56,35 +79,27 @@ class User:
         self.acid = resp.url.params.get("ac_id")
 
         # Check current login status and get device `online_ip`
-        login_status = self.get_login_status()
+        login_status = get_login_status(client=self.client)
         self.ip = login_status.get("online_ip")
+        self.logged_in_user = login_status.get("user_name")
 
-    def get_login_status(self) -> LoginStatusRespType:
-        """Get current login status.
-
-        Returns:
-            The login status of the current device. If the device is logged in, the
-            `user_name` field will be present. Otherwise, it will be `None`. As such,
-            the presence of `user_name` is used to check if the device is logged in.
-        """
-
-        resp = self.client.get("/cgi-bin/rad_user_info", params={"callback": "jsonp"})
-        return json.loads(resp.text[6:-1])
+        # Validate if current logged in user matches the provided username
+        if self.logged_in_user and self.logged_in_user != self.username:
+            raise Exception(
+                f"Current logged in user ({self.logged_in_user}) and "
+                f"yours ({self.username}) does not match"
+            )
 
     def login(self) -> UserResponseType:
-        logged_in_user = self._user_validate()
-
         # Raise exception if device is already logged in
-        if logged_in_user == self.username:
-            raise Exception(f"{logged_in_user}, you are already online")
+        if self.logged_in_user == self.username:
+            raise Exception(f"{self.logged_in_user}, you are already online")
 
         return self._do_action(Action.LOGIN)
 
     def logout(self) -> UserResponseType:
-        logged_in_user = self._user_validate()
-
         # Raise exception if device is not logged in
-        if logged_in_user is None:
+        if self.logged_in_user is None:
             raise Exception("you have already logged out")
 
         return self._do_action(Action.LOGOUT)
@@ -93,28 +108,6 @@ class User:
         params = self._make_params(action)
         response = self.client.get("/cgi-bin/srun_portal", params=params)
         return json.loads(response.text[6:-1])
-
-    def _user_validate(self) -> Optional[str]:
-        """Check if current logged in user matches the username provided.
-
-        Raises:
-            Exception: If current logged in user and username provided does not match.
-
-        Returns:
-            The username of the current logged in user if exists.
-        """
-
-        logged_in_user = self.get_login_status().get("user_name")
-
-        # Raise exception only if username exists on this IP and
-        # command line arguments provided another username
-        if logged_in_user and logged_in_user != self.username:
-            raise Exception(
-                f"Current logged in user ({logged_in_user}) and "
-                f"yours ({self.username}) does not match"
-            )
-
-        return logged_in_user
 
     def _get_token(self) -> str:
         params = {"callback": "jsonp", "username": self.username, "ip": self.ip}

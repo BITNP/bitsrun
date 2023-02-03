@@ -5,7 +5,7 @@ from pprint import pprint
 import click
 
 from bitsrun.config import get_config_paths, read_config
-from bitsrun.user import User
+from bitsrun.user import User, get_login_status
 
 # A hacky way to specify shared options for multiple click commands:
 # https://stackoverflow.com/questions/40182157/shared-options-and-flags-between-commands
@@ -40,6 +40,14 @@ def config_paths():
 
 
 @cli.command()
+def status():
+    """Check current network login status."""
+    status = get_login_status()
+    # TODO: Pretty print the status
+    pprint(status)
+
+
+@cli.command()
 @add_options(_options)
 def login(username, password, verbose):
     """Log into the BIT network."""
@@ -58,23 +66,23 @@ def do_action(action, username, password, verbose):
     if username and not password:
         password = getpass(prompt="Please enter your password: ")
 
-    # Try to read username and password from args provided. If none, look for config
-    # files in possible paths. If none, fail and prompt user to provide one.
-    if username and password:
-        user = User(username, password)
-    elif conf := read_config():
-        user = User(**conf[0])
-        if verbose:
-            click.echo(
-                click.style("bitsrun: ", fg="blue")
-                + "Reading config from "
-                + click.style(conf[1], fg="yellow", underline=True)
-            )
-    else:
-        ctx = click.get_current_context()
-        ctx.fail("No username or password provided")
-
     try:
+        # Try to read username and password from args provided. If none, look for config
+        # files in possible paths. If none, fail and prompt user to provide one.
+        if username and password:
+            user = User(username, password)
+        elif conf := read_config():
+            if verbose:
+                click.echo(
+                    click.style("bitsrun: ", fg="blue")
+                    + "Reading config from "
+                    + click.style(conf[1], fg="yellow", underline=True)
+                )
+            user = User(**conf[0])
+        else:
+            ctx = click.get_current_context()
+            ctx.fail("No username or password provided")
+
         if action == "login":
             resp = user.login()
             message = f"{user.username} ({resp['online_ip']}) logged in"
