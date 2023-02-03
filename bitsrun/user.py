@@ -4,7 +4,7 @@ from enum import Enum
 from hashlib import sha1
 from typing import Dict, Literal, Optional, TypedDict, Union
 
-from requests import Session
+import httpx
 
 from bitsrun.utils import fkbase64, parse_homepage, xencode
 
@@ -35,7 +35,7 @@ class User:
         self.password = password
 
         self.ip, self.acid = parse_homepage(api_base=_API_BASE)
-        self.session = Session()
+        self.client = httpx.Client(base_url=_API_BASE)
 
     def login(self) -> UserResponseType:
         logged_in_user = self._user_validate()
@@ -57,7 +57,7 @@ class User:
 
     def _do_action(self, action: Action) -> UserResponseType:
         params = self._make_params(action)
-        response = self.session.get(_API_BASE + "/cgi-bin/srun_portal", params=params)
+        response = self.client.get("/cgi-bin/srun_portal", params=params)
         return json.loads(response.text[6:-1])
 
     def _get_user_info(self) -> Optional[str]:
@@ -67,7 +67,7 @@ class User:
             The username of the current logged in user if exists.
         """
 
-        resp = self.session.get(_API_BASE + "/cgi-bin/rad_user_info")
+        resp = self.client.get("/cgi-bin/rad_user_info")
         data = resp.text
 
         if data == "not_online_error":
@@ -99,7 +99,7 @@ class User:
 
     def _get_token(self) -> str:
         params = {"callback": "jsonp", "username": self.username, "ip": self.ip}
-        response = self.session.get(_API_BASE + "/cgi-bin/get_challenge", params=params)
+        response = self.client.get("/cgi-bin/get_challenge", params=params)
         result = json.loads(response.text[6:-1])
         return result["challenge"]
 

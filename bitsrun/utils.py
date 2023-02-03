@@ -2,9 +2,8 @@ import math
 from base64 import b64encode
 from html.parser import HTMLParser
 from typing import Tuple
-from urllib.parse import parse_qs, urlparse
 
-import requests
+import httpx
 
 
 def parse_homepage(api_base: str) -> Tuple[str, str]:
@@ -18,11 +17,10 @@ def parse_homepage(api_base: str) -> Tuple[str, str]:
         A tuple of (ip, acid) of the current session.
     """
 
-    res = requests.get(api_base)
+    res = httpx.get(api_base, follow_redirects=True)
 
     # ac_id appears in the url query parameter of the redirected URL
-    query = parse_qs(urlparse(res.url).query)
-    ac_id = query.get("ac_id")
+    ac_id = res.url.params.get("ac_id")
 
     if not ac_id:
         raise Exception("failed to get acid")
