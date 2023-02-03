@@ -14,12 +14,15 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      - name: Install Poetry
-        uses: Gr1N/setup-poetry@v8
+      - name: Setup pdm
+        uses: pdm-project/setup-pdm@v3
+        with:
+          python-version: "3.11"
+          cache: true
       - name: Install build dependencies
-        run: poetry install --only main
+        run: pdm install --prod
       - name: Build package
-        run: poetry build
+        run: pdm build
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@7eb3b701d11256e583f5b49899c5e7203deab573
         with:
