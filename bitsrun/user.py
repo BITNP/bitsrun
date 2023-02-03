@@ -6,7 +6,7 @@ from typing import Dict, Literal, Optional, TypedDict, Union
 
 import httpx
 
-from bitsrun.utils import fkbase64, parse_homepage, xencode
+from bitsrun.utils import fkbase64, xencode
 
 _API_BASE = "http://10.0.0.55"
 _TYPE_CONST = 1
@@ -29,13 +29,47 @@ class UserResponseType(TypedDict):
     username: Optional[str]
 
 
+class LoginStatusRespType(TypedDict):
+    # Field `error` is `not_online_error` when device is not logged in
+    error: str
+    client_ip: Optional[str]
+    # Field `online_ip` is always present regardless of login status
+    online_ip: str
+    # Below are fields only present when device is logged in
+    sum_bytes: Optional[int]
+    sum_seconds: Optional[int]
+    user_balance: Optional[int]
+    user_name: Optional[str]
+    wallet_balance: Optional[int]
+
+
 class User:
     def __init__(self, username: str, password: str):
         self.username = username
         self.password = password
 
-        self.ip, self.acid = parse_homepage(api_base=_API_BASE)
+        # Initialize reused httpx client
         self.client = httpx.Client(base_url=_API_BASE)
+
+        # Get `ac_id` from the redirected login page
+        resp = self.client.get("/", follow_redirects=True)
+        self.acid = resp.url.params.get("ac_id")
+
+        # Check current login status and get device `online_ip`
+        login_status = self.get_login_status()
+        self.ip = login_status.get("online_ip")
+
+    def get_login_status(self) -> LoginStatusRespType:
+        """Get current login status.
+
+        Returns:
+            The login status of the current device. If the device is logged in, the
+            `user_name` field will be present. Otherwise, it will be `None`. As such,
+            the presence of `user_name` is used to check if the device is logged in.
+        """
+
+        resp = self.client.get("/cgi-bin/rad_user_info", params={"callback": "jsonp"})
+        return json.loads(resp.text[6:-1])
 
     def login(self) -> UserResponseType:
         logged_in_user = self._user_validate()
@@ -60,21 +94,6 @@ class User:
         response = self.client.get("/cgi-bin/srun_portal", params=params)
         return json.loads(response.text[6:-1])
 
-    def _get_user_info(self) -> Optional[str]:
-        """Get current logged in user info if exists.
-
-        Returns:
-            The username of the current logged in user if exists.
-        """
-
-        resp = self.client.get("/cgi-bin/rad_user_info")
-        data = resp.text
-
-        if data == "not_online_error":
-            return None
-
-        return data.split(",")[0]
-
     def _user_validate(self) -> Optional[str]:
         """Check if current logged in user matches the username provided.
 
@@ -85,7 +104,7 @@ class User:
             The username of the current logged in user if exists.
         """
 
-        logged_in_user = self._get_user_info()
+        logged_in_user = self.get_login_status().get("user_name")
 
         # Raise exception only if username exists on this IP and
         # command line arguments provided another username

@@ -1,53 +1,5 @@
 import math
 from base64 import b64encode
-from html.parser import HTMLParser
-from typing import Tuple
-
-import httpx
-
-
-def parse_homepage(api_base: str) -> Tuple[str, str]:
-    """Parse homepage of 10.0.0.55 and get the acid + ip of current session.
-
-    Raises:
-        Exception: Throw exception if acid not present in the redirected URL.
-        Exception: Throw exception if response text does not contain IP.
-
-    Returns:
-        A tuple of (ip, acid) of the current session.
-    """
-
-    res = httpx.get(api_base, follow_redirects=True)
-
-    # ac_id appears in the url query parameter of the redirected URL
-    ac_id = res.url.params.get("ac_id")
-
-    if not ac_id:
-        raise Exception("failed to get acid")
-
-    # ip appears in the response HTML
-    class IPParser(HTMLParser):
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.ip = None
-
-        def handle_starttag(self, tag, attrs):
-            if tag == "input":
-                attr_dict = dict(attrs)
-                if attr_dict.get("name") == "user_ip":
-                    self.ip = attr_dict["value"]
-
-        def feed(self, *args, **kwargs):
-            super().feed(*args, **kwargs)
-            return self.ip
-
-    parser = IPParser()
-    ip = parser.feed(res.text)
-
-    if not ip:
-        raise Exception("failed to get ip")
-
-    return ip, ac_id[0]
 
 
 def fkbase64(raw_s: str) -> str:
