@@ -1,12 +1,14 @@
 [project]
 name = "bitsrun"
-version = "3.3.1"
+version = "3.4.0"
 description = "A headless login / logout script for 10.0.0.55"
 authors = [{ name = "spencerwooo", email = "spencer.woo@outlook.com" }]
 dependencies = [
     "click<9.0.0,>=8.1.3",
     "platformdirs<3.0.0,>=2.6.2",
     "httpx>=0.23.3",
+    "rich>=13.3.1",
+    "humanize>=4.5.0",
 ]
 requires-python = ">=3.8,<4.0"
 readme = "README.md"

@@ -1,53 +1,45 @@
 import math
 from base64 import b64encode
-from html.parser import HTMLParser
-from typing import Tuple
 
-import httpx
+from humanize import naturaldelta, naturalsize
+from rich import box
+from rich.console import Console
+from rich.table import Table
+
+from bitsrun.models import LoginStatusRespType
 
 
-def parse_homepage(api_base: str) -> Tuple[str, str]:
-    """Parse homepage of 10.0.0.55 and get the acid + ip of current session.
+def print_status_table(login_status: LoginStatusRespType) -> None:
+    """Print the login status table to the console if logged in.
 
-    Raises:
-        Exception: Throw exception if acid not present in the redirected URL.
-        Exception: Throw exception if response text does not contain IP.
+    You should get something like this:
 
-    Returns:
-        A tuple of (ip, acid) of the current session.
+    ┌──────────────┬──────────────┬──────────────┬──────────────┐
+    │ Traffic Used │ Online Time  │ User Balance │ Wallet       │
+    ├──────────────┼──────────────┼──────────────┼──────────────┤
+    │ 879.3 MiB    │ 3 hours      │ 10.00        │ 0.00         │
+    └──────────────┴──────────────┴──────────────┴──────────────┘
     """
 
-    res = httpx.get(api_base, follow_redirects=True)
+    if not login_status.get("user_name"):
+        return
 
-    # ac_id appears in the url query parameter of the redirected URL
-    ac_id = res.url.params.get("ac_id")
+    table = Table(box=box.SQUARE)
 
-    if not ac_id:
-        raise Exception("failed to get acid")
+    table.add_column("Traffic Used", style="magenta", width=12)
+    table.add_column("Online Time", style="yellow", width=12)
+    table.add_column("User Balance", style="green", width=12)
+    table.add_column("Wallet", style="blue", width=12)
 
-    # ip appears in the response HTML
-    class IPParser(HTMLParser):
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.ip = None
+    table.add_row(
+        naturalsize(login_status.get("sum_bytes", 0), binary=True),  # type: ignore
+        naturaldelta(login_status.get("sum_seconds", 0)),  # type: ignore
+        f"{login_status.get('user_balance', 0):0.2f}",
+        f"{login_status.get('wallet_balance', 0):0.2f}",
+    )
 
-        def handle_starttag(self, tag, attrs):
-            if tag == "input":
-                attr_dict = dict(attrs)
-                if attr_dict.get("name") == "user_ip":
-                    self.ip = attr_dict["value"]
-
-        def feed(self, *args, **kwargs):
-            super().feed(*args, **kwargs)
-            return self.ip
-
-    parser = IPParser()
-    ip = parser.feed(res.text)
-
-    if not ip:
-        raise Exception("failed to get ip")
-
-    return ip, ac_id[0]
+    console = Console()
+    console.print(table)
 
 
 def fkbase64(raw_s: str) -> str:

@@ -29,6 +29,25 @@ pipx install bitsrun
 
 ### CLI
 
+Check login status of your device.
+
+![bitsrun status](https://user-images.githubusercontent.com/32114380/216757172-368d74bc-ad74-4122-9b1f-9568ce0341d3.png)
+
+```text
+Usage: bitsrun status [OPTIONS]
+
+  Check current network login status.
+
+Options:
+  --help  Show this message and exit.
+```
+
+> **Note**: this is the output of `bitsrun status --help`.
+
+Login or logout with your username and password.
+
+![bitsrun login](https://user-images.githubusercontent.com/32114380/216757151-b6e8c620-48b6-4411-ac41-f07b79ef9827.png)
+
 ```text
 Usage: bitsrun login/logout [OPTIONS]
 
