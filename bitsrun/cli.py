@@ -1,11 +1,12 @@
 import sys
 from getpass import getpass
-from pprint import pprint
 
 import click
+from rich import print_json
 
 from bitsrun.config import get_config_paths, read_config
 from bitsrun.user import User, get_login_status
+from bitsrun.utils import print_status_table
 
 # A hacky way to specify shared options for multiple click commands:
 # https://stackoverflow.com/questions/40182157/shared-options-and-flags-between-commands
@@ -42,9 +43,20 @@ def config_paths():
 @cli.command()
 def status():
     """Check current network login status."""
-    status = get_login_status()
-    # TODO: Pretty print the status
-    pprint(status)
+    login_status = get_login_status()
+
+    if login_status.get("user_name"):
+        click.echo(
+            click.style("bitsrun: ", fg="green")
+            + f"{login_status['user_name']} ({login_status['online_ip']}) is online"
+        )
+        print_status_table(login_status)
+
+    else:
+        click.echo(
+            click.style("bitsrun: ", fg="cyan")
+            + f"{login_status['online_ip']} is offline"
+        )
 
 
 @cli.command()
@@ -82,6 +94,7 @@ def do_action(action, username, password, verbose):
         else:
             ctx = click.get_current_context()
             ctx.fail("No username or password provided")
+            sys.exit(1)
 
         if action == "login":
             resp = user.login()
@@ -96,7 +109,7 @@ def do_action(action, username, password, verbose):
         # Output direct result of the API response if verbose
         if verbose:
             click.echo(f"{click.style('bitsrun:', fg='cyan')} Response from API:")
-            pprint(resp)
+            print_json(data=resp)
 
         # Handle error from API response. When field `error` is not `ok`, then the
         # login/logout action has likely failed. Hints are provided in the `error_msg`.

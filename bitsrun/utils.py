@@ -1,6 +1,46 @@
 import math
 from base64 import b64encode
 
+from humanize import naturaldelta, naturalsize
+from rich import box
+from rich.console import Console
+from rich.table import Table
+
+from bitsrun.models import LoginStatusRespType
+
+
+def print_status_table(login_status: LoginStatusRespType) -> None:
+    """Print the login status table to the console if logged in.
+
+    You should get something like this:
+
+    ┌──────────────┬──────────────┬──────────────┬──────────────┐
+    │ Traffic Used │ Online Time  │ User Balance │ Wallet       │
+    ├──────────────┼──────────────┼──────────────┼──────────────┤
+    │ 879.3 MiB    │ 3 hours      │ 10.00        │ 0.00         │
+    └──────────────┴──────────────┴──────────────┴──────────────┘
+    """
+
+    if not login_status.get("user_name"):
+        return
+
+    table = Table(box=box.SQUARE)
+
+    table.add_column("Traffic Used", style="magenta", width=12)
+    table.add_column("Online Time", style="yellow", width=12)
+    table.add_column("User Balance", style="green", width=12)
+    table.add_column("Wallet", style="blue", width=12)
+
+    table.add_row(
+        naturalsize(login_status.get("sum_bytes", 0), binary=True),  # type: ignore
+        naturaldelta(login_status.get("sum_seconds", 0)),  # type: ignore
+        f"{login_status.get('user_balance', 0):0.2f}",
+        f"{login_status.get('wallet_balance', 0):0.2f}",
+    )
+
+    console = Console()
+    console.print(table)
+
 
 def fkbase64(raw_s: str) -> str:
     """Encode string with a magic base64 mask"""
