@@ -1,18 +1,35 @@
 [project]
 name = "bitsrun"
-version = "3.4.0"
+version = "3.4.1"
 description = "A headless login / logout script for 10.0.0.55"
 authors = [{ name = "spencerwooo", email = "spencer.woo@outlook.com" }]
 dependencies = [
-    "click<9.0.0,>=8.1.3",
-    "platformdirs<3.0.0,>=2.6.2",
     "httpx>=0.23.3",
     "rich>=13.3.1",
     "humanize>=4.5.0",
+    "click>=8.1.3",
+    "platformdirs>=2.6.2",
 ]
-requires-python = ">=3.8,<4.0"
+requires-python = ">=3.8"
 readme = "README.md"
 license = { text = "WTFPL" }
+keywords = ["bit", "srun", "srun-login", "srun-client", "beijing-institute-of-technology"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Information Technology",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Education",
+    "Topic :: Internet",
+]
 
 [project.urls]
 homepage = "https://github.com/BITNP/bitsrun"
