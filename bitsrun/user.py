@@ -1,11 +1,11 @@
 import hmac
 import json
 from hashlib import sha1
-from typing import Dict, Optional, Union
+from typing import Optional
 
 import httpx
 
-from bitsrun.models import Action, LoginStatusRespType, UserResponseType
+from bitsrun.models import LoginStatusRespType, UserResponseType
 from bitsrun.utils import fkbase64, xencode
 
 _API_BASE = "http://10.0.0.55"
@@ -65,39 +65,21 @@ class User:
         if self.logged_in_user == self.username:
             raise Exception(f"{self.logged_in_user}, you are already online")
 
-        return self._do_action(Action.LOGIN)
-
-    def logout(self) -> UserResponseType:
-        # Raise exception if device is not logged in
-        if self.logged_in_user is None:
-            raise Exception("you have already logged out")
-
-        return self._do_action(Action.LOGOUT)
-
-    def _do_action(self, action: Action) -> UserResponseType:
-        params = self._make_params(action)
-        response = self.client.get("/cgi-bin/srun_portal", params=params)
-        return json.loads(response.text[6:-1])
-
-    def _get_token(self) -> str:
-        params = {"callback": "jsonp", "username": self.username, "ip": self.ip}
-        response = self.client.get("/cgi-bin/get_challenge", params=params)
-        result = json.loads(response.text[6:-1])
-        return result["challenge"]
-
-    def _make_params(self, action: Action) -> Dict[str, Union[int, str]]:
+        # Get challenge token for login authentication
         token = self._get_token()
 
+        # Prepare params for login request
         params = {
             "callback": "jsonp",
             "username": self.username,
-            "action": action.value,
+            "action": "login",
             "ac_id": self.acid,
             "ip": self.ip,
             "type": _TYPE_CONST,
             "n": _N_CONST,
         }
 
+        # Encode login data and generate checksum
         data = {
             "username": self.username,
             "password": self.password,
@@ -122,5 +104,31 @@ class User:
             ).encode()
         ).hexdigest()
 
+        # Update params with login data, checksum, and encrypted password
         params.update({"password": "{MD5}" + hmd5, "chksum": chksum, "info": info})
-        return params
+
+        response = self.client.get("/cgi-bin/srun_portal", params=params)
+        return json.loads(response.text[6:-1])
+
+    def logout(self) -> UserResponseType:
+        # Raise exception if device is not logged in
+        if self.logged_in_user is None:
+            raise Exception("you have already logged out")
+
+        # Logout params contain only the following fields
+        params = {
+            "callback": "jsonp",
+            "action": "logout",
+            "ac_id": self.acid,
+            "ip": self.ip,
+            "username": self.username,
+        }
+        response = self.client.get("/cgi-bin/srun_portal", params=params)
+        return json.loads(response.text[6:-1])
+
+    def _get_token(self) -> str:
+        """Get challenge token for login authentication."""
+        params = {"callback": "jsonp", "username": self.username, "ip": self.ip}
+        response = self.client.get("/cgi-bin/get_challenge", params=params)
+        result = json.loads(response.text[6:-1])
+        return result["challenge"]
