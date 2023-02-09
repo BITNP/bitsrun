@@ -1,10 +1,4 @@
-from enum import Enum
 from typing import Literal, Optional, TypedDict, Union
-
-
-class Action(Enum):
-    LOGIN = "login"
-    LOGOUT = "logout"
 
 
 class UserResponseType(TypedDict):
