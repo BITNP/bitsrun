@@ -24,7 +24,7 @@ jobs:
       - name: Build package
         run: pdm build
       - name: Publish package
-        uses: pypa/gh-action-pypi-publish@0eaf3a11fdca4a989056b00eda351a21c1b0426e
+        uses: pypa/gh-action-pypi-publish@32b5e9370928566935e085a9154f23bd662ef41c
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
