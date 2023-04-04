@@ -39,6 +39,7 @@ Usage: bitsrun status [OPTIONS]
   Check current network login status.
 
 Options:
+  --json / --no-json  Output in JSON format.
   --help  Show this message and exit.
 ```
 

@@ -1,5 +1,6 @@
 import sys
 from getpass import getpass
+from json import dumps
 
 import click
 from rich import print_json
@@ -41,17 +42,23 @@ def config_paths():
 
 
 @cli.command()
-def status():
+@click.option("--json/--no-json", default=False, help="Output in JSON format.")
+def status(json: bool):
     """Check current network login status."""
     login_status = get_login_status()
 
+    # Output in JSON format if `--json` is passed, then exit
+    if json:
+        print(dumps(login_status))
+        return
+
+    # Output in human-readable format
     if login_status.get("user_name"):
         click.echo(
             click.style("bitsrun: ", fg="green")
             + f"{login_status['user_name']} ({login_status['online_ip']}) is online"
         )
         print_status_table(login_status)
-
     else:
         click.echo(
             click.style("bitsrun: ", fg="cyan")
