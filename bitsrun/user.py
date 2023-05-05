@@ -2,6 +2,7 @@ import hmac
 import json
 from hashlib import sha1
 from typing import Optional
+from warnings import warn
 
 import httpx
 
@@ -55,9 +56,12 @@ class User:
 
         # Validate if current logged in user matches the provided username
         if self.logged_in_user and self.logged_in_user != self.username:
-            raise Exception(
+            warn(
                 f"Current logged in user ({self.logged_in_user}) and "
-                f"yours ({self.username}) does not match"
+                f"yours ({self.username}) does not match. "
+                "Most likely bitsrun will work fine, "
+                "but that may differ from what you really want.",
+                stacklevel=1,
             )
 
     def login(self) -> UserResponseType:
@@ -121,7 +125,9 @@ class User:
             "action": "logout",
             "ac_id": self.acid,
             "ip": self.ip,
-            "username": self.username,
+            "username": self.logged_in_user,
+            # `logged_in_user` may differ from `username`.
+            # Anyway, we can logout without password.
         }
         response = self.client.get("/cgi-bin/srun_portal", params=params)
         return json.loads(response.text[6:-1])

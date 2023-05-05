@@ -1,4 +1,5 @@
 import sys
+import warnings
 from getpass import getpass
 from json import dumps
 
@@ -16,6 +17,14 @@ _options = [
     click.option("-p", "--password", help="Your password.", required=False),
     click.option("-v", "--verbose", is_flag=True, help="Verbosely echo API response."),
 ]
+
+
+# Replace the default implementation
+warnings.showwarning = (
+    lambda message, category, filename, lineno, file=None, line=None: click.echo(
+        f"{click.style('warning:', fg='yellow')} {message}", err=True
+    )
+)
 
 
 # Decorator to add options to a click command (used w/ the hack above)
