@@ -1,4 +1,4 @@
-.pdm.toml
+.pdm-python
 .directory
 .ide
 # Byte-compiled / optimized / DLL files
