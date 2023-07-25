@@ -101,21 +101,26 @@ Import the two Raycast scripts from [`./scripts`](./scripts/) and setup your con
 
 ## Developing
 
-Install and run:
+Create virtual environment and install deps:
 
 ```shell
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
+```
+
+Running CLI entry:
+
+```shell
+python src/bitsrun/cli.py
 ```
 
 Build:
 
 ```shell
-pdm build
-```
-
-Publish:
-
-```shell
-pdm publish
+pip install setuptools build
+python -m build
 ```
 
 ## Credits
