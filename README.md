@@ -32,7 +32,7 @@ Alternatively, you can download a self-contained executable from [GitHub Release
 
 Check login status of your device.
 
-![bitsrun status](https://user-images.githubusercontent.com/32114380/216757172-368d74bc-ad74-4122-9b1f-9568ce0341d3.png)
+![bitsrun status](https://github.com/BITNP/bitsrun/assets/32114380/e877d6a9-120a-444a-b580-0a0fcac857ce)
 
 ```text
 Usage: bitsrun status [OPTIONS]
@@ -48,7 +48,7 @@ Options:
 
 Login or logout with your username and password.
 
-![bitsrun login](https://user-images.githubusercontent.com/32114380/216757151-b6e8c620-48b6-4411-ac41-f07b79ef9827.png)
+![bitsrun login](https://github.com/BITNP/bitsrun/assets/32114380/4ca8cd64-580b-4ab8-824f-0049f41f78bb)
 
 ```text
 Usage: bitsrun login/logout [OPTIONS]
