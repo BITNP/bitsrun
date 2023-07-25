@@ -14,13 +14,13 @@ jobs:
         include:
           - os: ubuntu-latest
             artifact_name: bitsrun
-            release_name: bitsrun-x86_64-linux.tar.gz
+            asset_name: bitsrun-x86_64-linux.bin
           - os: windows-latest
             artifact_name: bitsrun.exe
-            release_name: bitsrun-x86_64-windows.exe
+            asset_name: bitsrun-x86_64-windows.exe
           - os: macos-latest
             artifact_name: bitsrun
-            release_name: bitsrun-universal-macos.tar.gz
+            asset_name: bitsrun-universal-macos.bin
 
     steps:
       - uses: actions/checkout@v3
@@ -45,17 +45,17 @@ jobs:
         run: pyinstaller --onefile --noconfirm --clean --name=${{ matrix.artifact_name }} --target-arch=universal2 src/bitsrun/cli.py
         if: matrix.os == 'macos-latest'
 
-      - name: Package binaries for Linux/macOS
-        run: |
-          cd dist
-          tar -czvf ${{ matrix.release_name }} ${{ matrix.artifact_name }}
-          cd -
-        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+      # - name: Package binaries for Linux/macOS
+      #   run: |
+      #     cd dist
+      #     tar -czvf ${{ matrix.asset_name }} ${{ matrix.artifact_name }}
+      #     cd -
+      #   if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
 
       - name: Upload binaries to GitHub release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: dist/${{ matrix.artifact_name }}
-          asset_name: ${{ matrix.release_name }}
+          asset_name: ${{ matrix.asset_name }}
           tag: ${{ github.ref }}
