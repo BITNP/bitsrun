@@ -28,4 +28,4 @@ jobs:
       - name: Mypy
         run: |
           pip install mypy
-          mypy bitsrun/
+          mypy src/
