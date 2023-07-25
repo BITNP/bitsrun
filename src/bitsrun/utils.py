@@ -82,10 +82,10 @@ def xencode(msg, key) -> str:
             ll = m
         for i in range(0, msg_len):
             msg[i] = (
-                    chr(msg[i] & 0xFF)
-                    + chr(msg[i] >> 8 & 0xFF)
-                    + chr(msg[i] >> 16 & 0xFF)
-                    + chr(msg[i] >> 24 & 0xFF)
+                chr(msg[i] & 0xFF)
+                + chr(msg[i] >> 8 & 0xFF)
+                + chr(msg[i] >> 16 & 0xFF)
+                + chr(msg[i] >> 24 & 0xFF)
             )
         if key:
             return "".join(msg)[0:ll]
