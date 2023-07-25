@@ -1,7 +1,6 @@
 # bitsrun
 
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)](https://github.com/charliermarsh/ruff)
-[![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Pre-commit](https://github.com/BITNP/bitsrun/actions/workflows/ci.yml/badge.svg)](https://github.com/BITNP/bitsrun/actions/workflows/ci.yml)
 [![PyPI Publish](https://github.com/BITNP/bitsrun/actions/workflows/python-publish.yml/badge.svg)](https://github.com/BITNP/bitsrun/actions/workflows/python-publish.yml)
 [![PyPI](https://img.shields.io/pypi/v/bitsrun)](https://pypi.org/project/bitsrun/)
@@ -105,14 +104,6 @@ Import the two Raycast scripts from [`./scripts`](./scripts/) and setup your con
 Install and run:
 
 ```shell
-# Create virtual env and install deps
-pdm install
-
-# Enter virtual env
-eval $(pdm venv activate)
-
-# Install pre-commit hooks
-pre-commit install
 ```
 
 Build:

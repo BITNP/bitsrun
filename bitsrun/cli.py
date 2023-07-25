@@ -18,7 +18,6 @@ _options = [
     click.option("-v", "--verbose", is_flag=True, help="Verbosely echo API response."),
 ]
 
-
 # Replace the default implementation
 warnings.showwarning = (
     lambda message, category, filename, lineno, file=None, line=None: click.echo(

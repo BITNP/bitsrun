@@ -37,20 +37,9 @@ homepage = "https://github.com/BITNP/bitsrun"
 [project.scripts]
 bitsrun = "bitsrun.cli:cli"
 
-[tool.pdm]
-[tool.pdm.dev-dependencies]
-dev = [
-    "black>=23.3.0",
-    "ruff>=0.0.265",
-    "mypy>=1.2.0",
-    "pre-commit>=3.3.1",
-]
-
-[tool.pdm.build]
-includes = []
 [build-system]
-requires = ["pdm-pep517>=1.0.0"]
-build-backend = "pdm.pep517.api"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [tool.ruff]
 line-length = 88
@@ -62,7 +51,3 @@ no_implicit_optional = true
 check_untyped_defs = true
 # disallow_untyped_defs = true
 # warn_return_any = true
-
-[tool.pdm.scripts]
-lint = "pre-commit run --all-files"
-type-check = "mypy bitsrun"

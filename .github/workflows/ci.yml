@@ -3,7 +3,7 @@ name: lint
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -11,18 +11,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      - name: Setup and run pre-commit
-        uses: pre-commit/action@v3.0.0
-      - name: Setup pdm
-        uses: pdm-project/setup-pdm@v3
-        with:
-          python-version: "3.11"
-          cache: true
-      - name: Install dependencies
-        run: pdm install
-      - name: Enforce types with mypy
-        run: pdm type-check
+          cache: 'pip' # caching pip dependencies
+      - run: pip install -r requirements.txt
+
+      - name: Ruff linting
+        uses: chartboost/ruff-action@v1
+
+      - name: Black formatting
+        uses: psf/black@stable
+
+      - name: Mypy
+        run: |
+          pip install mypy
+          mypy bitsrun/
