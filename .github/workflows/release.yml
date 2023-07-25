@@ -7,7 +7,21 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            artifact_name: bitsrun
+            release_name: bitsrun-x86_64-linux.tar.gz
+          - os: windows-latest
+            artifact_name: bitsrun.exe
+            release_name: bitsrun-x86_64-windows.exe
+          - os: macos-latest
+            artifact_name: bitsrun
+            release_name: bitsrun-universal-macos.tar.gz
+
     steps:
       - uses: actions/checkout@v3
 
@@ -23,19 +37,25 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pip install pyinstaller
 
-      - name: Compile single executable for Linux
-        run: pyinstaller --onefile --noconfirm --clean --name=bitsrun src/bitsrun/cli.py
+      - name: Compile single executable for Windows/Linux
+        run: pyinstaller --onefile --noconfirm --clean --name=${{ matrix.artifact_name }} src/bitsrun/cli.py
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'windows-latest'
 
-      - name: Package binaries
+      - name: Compile single executable for macOS
+        run: pyinstaller --onefile --noconfirm --clean --name=${{ matrix.artifact_name }} --target-arch=universal2 src/bitsrun/cli.py
+        if: matrix.os == 'macos-latest'
+
+      - name: Package binaries for Linux/macOS
         run: |
           cd dist
-          tar -czvf bitsrun.tar.gz bitsrun
+          tar -czvf ${{ matrix.release_name }} ${{ matrix.artifact_name }}
           cd -
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
 
       - name: Upload binaries to GitHub release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/bitsrun.tar.gz
-          asset_name: bitsrun.tar.gz
+          file: dist/${{ matrix.artifact_name }}
+          asset_name: ${{ matrix.release_name }}
           tag: ${{ github.ref }}

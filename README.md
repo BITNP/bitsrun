@@ -24,6 +24,8 @@ After which, install `bitsrun` with `pipx`.
 pipx install bitsrun
 ```
 
+Alternatively, you can download a self-contained executable from [GitHub Releases](https://github.com/BITNP/bitsrun/releases/latest) if you are working from an environment that does not have internet access.
+
 ## Usage
 
 ### CLI
