@@ -108,7 +108,6 @@ Create virtual environment and install deps:
 ```shell
 python -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
 pip install -e .
 ```
 
@@ -125,9 +124,13 @@ pip install setuptools build
 python -m build
 ```
 
-## Credits
+## Credits and related
 
-- [Aloxaf/10_0_0_55_login](https://github.com/Aloxaf/10_0_0_55_login)
+- [Aloxaf/10_0_0_55_login](https://github.com/Aloxaf/10_0_0_55_login) - BIT 10.0.0.55 的登入与登出的 Python 实现 (This project's predecessor, archived)
+- [spencerwooo/bitsrun-rs](https://github.com/spencerwooo/bitsrun-rs) - A Rust implementation of `bitsrun`. (Rust)
+- [zu1k/srun](https://github.com/zu1k/srun) - Srun authentication system login tools. (Rust)
+- [Mmx233/BitSrunLoginGo](https://github.com/Mmx233/BitSrunLoginGo) - 深澜校园网登录脚本 Go 语言版 (Go)
+- [vouv/srun](https://github.com/vouv/srun) - An efficient client for BIT campus network. (Go)
 
 ## License
 
