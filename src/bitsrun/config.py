@@ -6,7 +6,7 @@ from typing import Optional, Tuple, TypedDict
 
 from platformdirs import site_config_path, user_config_path
 
-_APP_NAME = "bitsrun"
+_APP_NAME = 'bitsrun'
 
 
 def get_config_paths() -> map:
@@ -42,20 +42,20 @@ def get_config_paths() -> map:
     ]
 
     # For backward compatibility
-    if not platform.startswith("win32"):
-        paths.insert(0, Path("/etc/"))
+    if not platform.startswith('win32'):
+        paths.insert(0, Path('/etc/'))
 
-        if platform.startswith("darwin"):
-            xdg_config_home = getenv("XDG_CONFIG_HOME", "")
+        if platform.startswith('darwin'):
+            xdg_config_home = getenv('XDG_CONFIG_HOME', '')
             if xdg_config_home.strip():
                 paths.append(Path(xdg_config_home))
             else:
-                paths.append(Path.home() / ".config")
+                paths.append(Path.home() / '.config')
             paths.append(paths[-1] / _APP_NAME)
         else:
             paths.append(user_config_path())
 
-    return map(lambda path: path / "bit-user.json", paths)
+    return map(lambda path: path / 'bit-user.json', paths)
 
 
 class ConfigType(TypedDict):
