@@ -10,20 +10,23 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
           cache: "pip" # caching pip dependencies
-      - run: pip install -r requirements.txt
 
-      - name: Ruff linting
+      - run: pip install -e .
+
+      - name: Ruff format
         uses: chartboost/ruff-action@v1
+        with:
+          args: format --check
 
-      - name: Black formatting
-        uses: psf/black@stable
+      - name: Ruff lint
+        uses: chartboost/ruff-action@v1
 
       - name: Mypy
         run: |

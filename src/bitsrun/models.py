@@ -5,9 +5,9 @@ class UserResponseType(TypedDict):
     client_ip: str
     online_ip: str
     # Field `error` is also `login_error` when logout action fails
-    error: Union[Literal["login_error"], Literal["ok"]]
+    error: Union[Literal['login_error'], Literal['ok']]
     error_msg: str
-    res: Union[Literal["login_error"], Literal["ok"]]
+    res: Union[Literal['login_error'], Literal['ok']]
     # Field `username` is not present on login fails and all logout scenarios
     username: Optional[str]
 

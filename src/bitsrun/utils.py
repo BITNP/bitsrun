@@ -21,19 +21,19 @@ def print_status_table(login_status: LoginStatusRespType) -> None:
     └──────────────┴──────────────┴──────────────┴──────────────┘
     """
 
-    if not login_status.get("user_name"):
+    if not login_status.get('user_name'):
         return
 
     table = Table(box=box.SQUARE)
 
-    table.add_column("Traffic Used", style="magenta", width=12)
-    table.add_column("Online Time", style="yellow", width=12)
-    table.add_column("User Balance", style="green", width=12)
-    table.add_column("Wallet", style="blue", width=12)
+    table.add_column('Traffic Used', style='magenta', width=12)
+    table.add_column('Online Time', style='yellow', width=12)
+    table.add_column('User Balance', style='green', width=12)
+    table.add_column('Wallet', style='blue', width=12)
 
     table.add_row(
-        naturalsize(login_status.get("sum_bytes", 0), binary=True),  # type: ignore
-        naturaldelta(login_status.get("sum_seconds", 0)),  # type: ignore
+        naturalsize(login_status.get('sum_bytes', 0), binary=True),  # type: ignore
+        naturaldelta(login_status.get('sum_seconds', 0)),  # type: ignore
         f"{login_status.get('user_balance', 0):0.2f}",
         f"{login_status.get('wallet_balance', 0):0.2f}",
     )
@@ -45,8 +45,8 @@ def print_status_table(login_status: LoginStatusRespType) -> None:
 def fkbase64(raw_s: str) -> str:
     """Encode string with a magic base64 mask"""
     trans = str.maketrans(
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
-        "LVoJPiCN2R8G90yg+hmFHuacZ1OWMnrsSTXkYpUq/3dlbfKwv6xztjI7DeBE45QA",
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+        'LVoJPiCN2R8G90yg+hmFHuacZ1OWMnrsSTXkYpUq/3dlbfKwv6xztjI7DeBE45QA',
     )
     ret = b64encode(bytes(ord(i) & 0xFF for i in raw_s))
     return ret.decode().translate(trans)
@@ -78,7 +78,7 @@ def xencode(msg, key) -> str:
         if key:
             m = msg[msg_len - 1]
             if m < ll - 3 or m > ll:
-                return ""
+                return ''
             ll = m
         for i in range(0, msg_len):
             msg[i] = (
@@ -88,11 +88,11 @@ def xencode(msg, key) -> str:
                 + chr(msg[i] >> 24 & 0xFF)
             )
         if key:
-            return "".join(msg)[0:ll]
-        return "".join(msg)
+            return ''.join(msg)[0:ll]
+        return ''.join(msg)
 
-    if msg == "":
-        return ""
+    if msg == '':
+        return ''
     pwd = sencode(msg, True)
     pwdk = sencode(key, False)
     if len(pwdk) < 4:

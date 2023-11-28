@@ -1,6 +1,6 @@
 [project]
 name = "bitsrun"
-version = "3.6.0"
+version = "3.6.1"
 description = "A headless login / logout script for 10.0.0.55"
 authors = [{ name = "spencerwooo", email = "spencer.woo@outlook.com" }]
 dependencies = [
@@ -44,6 +44,10 @@ build-backend = "setuptools.build_meta"
 [tool.ruff]
 line-length = 88
 select = ["E", "F", "I", "N", "B", "SIM"]
+
+[tool.ruff.format]
+# Use single quotes rather than double quotes.
+quote-style = "single"
 
 [tool.mypy]
 disallow_any_unimported = true
