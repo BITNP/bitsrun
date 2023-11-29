@@ -1,6 +1,6 @@
 [project]
 name = "bitsrun"
-version = "3.6.1"
+version = "3.7.0"
 description = "A headless login / logout script for 10.0.0.55"
 authors = [{ name = "spencerwooo", email = "spencer.woo@outlook.com" }]
 dependencies = [
