@@ -4,10 +4,13 @@
 [![Pre-commit](https://github.com/BITNP/bitsrun/actions/workflows/ci.yml/badge.svg)](https://github.com/BITNP/bitsrun/actions/workflows/ci.yml)
 [![PyPI Publish](https://github.com/BITNP/bitsrun/actions/workflows/python-publish.yml/badge.svg)](https://github.com/BITNP/bitsrun/actions/workflows/python-publish.yml)
 [![PyPI](https://img.shields.io/pypi/v/bitsrun)](https://pypi.org/project/bitsrun/)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/bitsrun)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/bitsrun)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/bitsrun)](https://pypi.org/project/bitsrun/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/bitsrun?color=orange)](https://pypi.org/project/bitsrun/)
 
-_A headless login / logout script for 10.0.0.55 at BIT._
+A headless login / logout script for 10.0.0.55 at BIT.
+
+| :sparkles: | Blazingly™ Fast Rust re-implementation of `bitsrun` available at [spencerwooo/bitsrun](https://github.com/spencerwooo/bitsrun-rs), if you require or prefer a single compiled executable (or 🦀 Rust). |
+| - |:-|
 
 ## Install
 
@@ -64,7 +67,7 @@ Options:
 
 > **Note**: this is the output of `bitsrun login/logout --help`.
 
-### Configuration file
+### Credentials config
 
 Create new file named `bit-user.json`:
 
@@ -79,6 +82,12 @@ This file should be put under the following directory:
 
 - Windows: `%APPDATA%\bitsrun`
 - macOS and Linux: `~/.config/bitsrun` (Following the XDG spec)
+
+**On unix, set the file permission to `600`, i.e., only read/writeable by the owner:**
+
+```shell
+chmod 600 path/to/bit-user.json
+```
 
 Now you can simply call:
 
