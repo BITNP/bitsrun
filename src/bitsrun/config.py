@@ -3,6 +3,7 @@ from os import getenv
 from pathlib import Path
 from sys import platform
 from typing import Optional, Tuple, TypedDict
+from warnings import warn
 
 from platformdirs import site_config_path, user_config_path
 
@@ -72,13 +73,29 @@ def read_config() -> Optional[Tuple[ConfigType, str]]:
     { "username": "xxxx", "password": "xxxx" }
     ```
 
+    The config file must be only readable/writable by the owner.
+
     Returns:
         A tuple of (config, path to config file) if the config file is found.
     """
 
+    def check_permissions(path: Path):
+        """Config file permissions must not be set too open."""
+
+        # The check is performed on unix only.
+        if not platform.startswith('win32'):
+            pm = path.stat().st_mode & 0o777
+            if pm != 0o600:
+                warn(f'{path} has too open permissions ({pm}), ignoring!', stacklevel=1)
+                warn(f'please run `chmod 600 {path}` to fix this.', stacklevel=1)
+                raise PermissionError()
+
     paths = get_config_paths()
     for path in paths:
         try:
+            if not path.exists():
+                continue
+            check_permissions(path)
             with open(path) as f:
                 data = json.loads(f.read())
                 return data, str(path)
