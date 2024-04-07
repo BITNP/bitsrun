@@ -43,6 +43,8 @@ build-backend = "setuptools.build_meta"
 
 [tool.ruff]
 line-length = 88
+
+[tool.ruff.lint]
 select = ["E", "F", "I", "N", "B", "SIM"]
 
 [tool.ruff.format]
