@@ -45,9 +45,17 @@ class User:
         # Initialize reused httpx client
         self.client = httpx.Client(base_url=_API_BASE)
 
-        # Get `ac_id` from the redirected login page
+        # Visit another site using HTTP, and let srun redirect to 10.0.0.55
+        # with url params (ac_id, theme, wlanuserip, etc.)
+        # but better to check since the user may have been authenticated
         resp = self.client.get('/', follow_redirects=True)
-        self.acid = resp.url.params.get('ac_id')
+        resp_valid = httpx.Client(base_url='http://www.bit.edu.cn').get(
+            '/', follow_redirects=True
+        )
+        if resp_valid.url.params.get('ac_id') is None:
+            self.acid = resp.url.params.get('ac_id')
+        else:
+            self.acid = resp_valid.url.params.get('ac_id')
 
         # Check current login status and get device `online_ip`
         login_status = get_login_status(client=self.client)
