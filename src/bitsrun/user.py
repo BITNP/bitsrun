@@ -45,7 +45,8 @@ class User:
         # Initialize reused httpx client
         self.client = httpx.Client(base_url=_API_BASE)
 
-        # use http to visit another site, redirect by srun to 10.0.0.55 to get url params (ac_id, theme, wlanuserip, etc.)
+        # Visit another site using HTTP, and let srun redirect to 10.0.0.55
+        # with url params (ac_id, theme, wlanuserip, etc.)
         # but better to check since the user may have been authenticated
         resp = self.client.get('/', follow_redirects=True)
         resp_valid = httpx.Client(base_url='http://www.bit.edu.cn').get(
