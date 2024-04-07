@@ -1,6 +1,6 @@
 [project]
 name = "bitsrun"
-version = "3.7.0"
+version = "3.7.1"
 description = "A headless login / logout script for 10.0.0.55"
 authors = [{ name = "spencerwooo", email = "spencer.woo@outlook.com" }]
 dependencies = [
@@ -27,6 +27,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Education",
     "Topic :: Internet",
 ]
