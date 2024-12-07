@@ -27,7 +27,7 @@ jobs:
         run: python -m build
 
       - name: Publish package
-        uses: pypa/gh-action-pypi-publish@15c56dba361d8335944d31a2ecd17d700fc7bcbc
+        uses: pypa/gh-action-pypi-publish@cbd6d01d855e02aab0908c7709d5c0ddc88c617a
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
