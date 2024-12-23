@@ -11,6 +11,7 @@ A headless login / logout script for 10.0.0.55 at BIT.
 
 | :sparkles: | Blazingly™ Fast Rust re-implementation of `bitsrun` available at [spencerwooo/bitsrun](https://github.com/spencerwooo/bitsrun-rs), if you require or prefer a single compiled executable (or 🦀 Rust). |
 | - |:-|
+| 🌱 | A Magic Bash re-implementation of `bitsrun` available at [BITNP/bitsrun.sh](https://github.com/BITNP/bitsrun.sh), if you require or prefer a single bash script. |
 
 ## Install
 
