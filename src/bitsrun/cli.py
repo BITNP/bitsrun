@@ -21,7 +21,7 @@ _options = [
 # Replace the default implementation
 warnings.showwarning = (
     lambda message, category, filename, lineno, file=None, line=None: click.echo(
-        f"{click.style('warning:', fg='yellow')} {message}", err=True
+        f'{click.style("warning:", fg="yellow")} {message}', err=True
     )
 )
 
@@ -64,13 +64,13 @@ def status(json: bool):
     if login_status.get('user_name'):
         click.echo(
             click.style('bitsrun: ', fg='green')
-            + f"{login_status['user_name']} ({login_status['online_ip']}) is online"
+            + f'{login_status["user_name"]} ({login_status["online_ip"]}) is online'
         )
         print_status_table(login_status)
     else:
         click.echo(
             click.style('bitsrun: ', fg='cyan')
-            + f"{login_status['online_ip']} is offline"
+            + f'{login_status["online_ip"]} is offline'
         )
 
 
@@ -113,17 +113,17 @@ def do_action(action, username, password, verbose):
 
         if action == 'login':
             resp = user.login()
-            message = f"{user.username} ({resp['online_ip']}) logged in"
+            message = f'{user.username} ({resp["online_ip"]}) logged in'
         elif action == 'logout':
             resp = user.logout()
-            message = f"{resp['online_ip']} logged out"
+            message = f'{resp["online_ip"]} logged out'
         else:
             # Should not reach here, but just in case
             raise ValueError(f'Unknown action `{action}`')
 
         # Output direct result of the API response if verbose
         if verbose:
-            click.echo(f"{click.style('bitsrun:', fg='cyan')} Response from API:")
+            click.echo(f'{click.style("bitsrun:", fg="cyan")} Response from API:')
             print_json(data=resp)
 
         # Handle error from API response. When field `error` is not `ok`, then the
@@ -136,11 +136,11 @@ def do_action(action, username, password, verbose):
             )
 
         # Print success message
-        click.echo(f"{click.style('bitsrun:', fg='green')} {message}")
+        click.echo(f'{click.style("bitsrun:", fg="green")} {message}')
 
     except Exception as e:
         # Exception is caught and printed to stderr
-        click.echo(f"{click.style('error:', fg='red')} {e}", err=True)
+        click.echo(f'{click.style("error:", fg="red")} {e}', err=True)
         # Throw with error code 1 for scripts to pick up error state
         sys.exit(1)
 

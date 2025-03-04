@@ -34,8 +34,8 @@ def print_status_table(login_status: LoginStatusRespType) -> None:
     table.add_row(
         naturalsize(login_status.get('sum_bytes', 0), binary=True),  # type: ignore
         naturaldelta(login_status.get('sum_seconds', 0)),  # type: ignore
-        f"{login_status.get('user_balance', 0):0.2f}",
-        f"{login_status.get('wallet_balance', 0):0.2f}",
+        f'{login_status.get("user_balance", 0):0.2f}',
+        f'{login_status.get("wallet_balance", 0):0.2f}',
     )
 
     console = Console()
