@@ -9,12 +9,11 @@ import httpx
 from bitsrun.models import LoginStatusRespType, UserResponseType
 from bitsrun.utils import fkbase64, xencode
 
-_API_BASE = 'http://10.0.0.55'
 _TYPE_CONST = 1
 _N_CONST = 200
 
 
-def get_login_status(client: Optional[httpx.Client] = None) -> LoginStatusRespType:
+def get_login_status(auth_url, client: Optional[httpx.Client] = None) -> LoginStatusRespType:
     """Get current login status of the device.
 
     Note:
@@ -31,19 +30,20 @@ def get_login_status(client: Optional[httpx.Client] = None) -> LoginStatusRespTy
     """
 
     if not client:
-        client = httpx.Client(base_url=_API_BASE)
+        client = httpx.Client(base_url=auth_url)
 
     resp = client.get('/cgi-bin/rad_user_info', params={'callback': 'jsonp'})
     return json.loads(resp.text[6:-1])
 
 
 class User:
-    def __init__(self, username: str, password: str):
+    def __init__(self, username: str, password: str, auth_url: str='http://10.0.0.55'):
         self.username = username
         self.password = password
+        self.auth_url = auth_url
 
         # Initialize reused httpx client
-        self.client = httpx.Client(base_url=_API_BASE)
+        self.client = httpx.Client(base_url=self.auth_url)
 
         # Visit another site using HTTP, and let srun redirect to 10.0.0.55
         # with url params (ac_id, theme, wlanuserip, etc.)
@@ -58,7 +58,7 @@ class User:
             self.acid = resp_valid.url.params.get('ac_id')
 
         # Check current login status and get device `online_ip`
-        login_status = get_login_status(client=self.client)
+        login_status = get_login_status(auth_url=self.auth_url, client=self.client)
         self.ip = login_status.get('online_ip')
         self.logged_in_user = login_status.get('user_name')
 

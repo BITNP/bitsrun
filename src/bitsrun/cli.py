@@ -15,6 +15,7 @@ from bitsrun.utils import print_status_table
 _options = [
     click.option('-u', '--username', help='Your username.', required=False),
     click.option('-p', '--password', help='Your password.', required=False),
+    click.option('-a', '--auth_url', default='http://10.0.0.55', help='Authentication portal URL. (Optional)'),
     click.option('-v', '--verbose', is_flag=True, help='Verbosely echo API response.'),
 ]
 
@@ -51,9 +52,10 @@ def config_paths():
 
 @cli.command()
 @click.option('--json/--no-json', default=False, help='Output in JSON format.')
-def status(json: bool):
+@click.option('-a', '--auth_url', default='http://10.0.0.55', help='Authentication portal URL. (Optional)')
+def status(json: bool, auth_url: str):
     """Check current network login status."""
-    login_status = get_login_status()
+    login_status = get_login_status(auth_url)
 
     # Output in JSON format if `--json` is passed, then exit
     if json:
@@ -76,19 +78,19 @@ def status(json: bool):
 
 @cli.command()
 @add_options(_options)
-def login(username, password, verbose):
+def login(username, password, auth_url, verbose):
     """Log into the BIT network."""
-    do_action('login', username, password, verbose)
+    do_action('login', username, password, auth_url, verbose)
 
 
 @cli.command()
 @add_options(_options)
-def logout(username, password, verbose):
+def logout(username, password, auth_url, verbose):
     """Log out of the BIT network."""
-    do_action('logout', username, password, verbose)
+    do_action('logout', username, password, auth_url, verbose)
 
 
-def do_action(action, username, password, verbose):
+def do_action(action, username, password, auth_url, verbose):
     # Support reading password from stdin when not passed via `--password`
     if username and not password:
         password = getpass(prompt='Please enter your password: ')
@@ -97,7 +99,7 @@ def do_action(action, username, password, verbose):
         # Try to read username and password from args provided. If none, look for config
         # files in possible paths. If none, fail and prompt user to provide one.
         if username and password:
-            user = User(username, password)
+            user = User(username, password, auth_url)
         elif conf := read_config():
             if verbose:
                 click.echo(
