@@ -51,8 +51,9 @@ Usage: bitsrun status [OPTIONS]
   Check current network login status.
 
 Options:
-  --json / --no-json  Output in JSON format.
-  --help  Show this message and exit.
+  --json / --no-json   Output in JSON format.
+  -a, --auth_url TEXT  Authentication portal URL. (Optional)
+  --help               Show this message and exit.
 ```
 
 > **Note**: this is the output of `bitsrun status --help`.
@@ -69,6 +70,7 @@ Usage: bitsrun login/logout [OPTIONS]
 Options:
   -u, --username TEXT  Your username.
   -p, --password TEXT  Your password.
+  -a, --auth_url TEXT  Authentication portal URL. (Optional)
   -v, --verbose        Verbosely echo API response.
   --help               Show this message and exit.
 ```
@@ -112,6 +114,19 @@ To list all possible paths for your system (including those only for backward co
 bitsrun config-paths
 ```
 
+### Srun at other campuses
+
+This script also works for other campuses using srun authentication. If your campus uses a different authentication portal, just add the `"auth_url"` field to your `bit-user.json` config file:
+
+```json
+{
+    "username": "xxxx",
+    "password": "xxxx",
+    "auth_url": "http(s)://your-portal-address"
+}
+```
+
+Or use the `--auth_url` option in CLI commands. This makes bitsrun compatible with other schools or custom portals.
 ### Raycast script (macOS)
 
 ![raycast screenshot](https://user-images.githubusercontent.com/32114380/213919582-eff6d58f-1bd2-47b2-a5da-46dc6e2eaffa.png)
